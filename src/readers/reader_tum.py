@@ -42,11 +42,11 @@ class ReaderTUM(Reader):
         return images_paths, pcds_paths, res_traj
 
     @staticmethod
-    def _rgb_getter(path_to_image: str) -> NDArray[Shape["*, *, 3"], UInt8]:
+    def _get_rgb(path_to_image: str) -> NDArray[Shape["*, *, 3"], UInt8]:
         return cv2.imread(path_to_image, cv2.IMREAD_COLOR)
 
     @staticmethod
-    def _pcd_getter(path_to_pcd: str) -> o3d.geometry.PointCloud:
+    def _get_pcd(path_to_pcd: str) -> o3d.geometry.PointCloud:
         depth_image = cv2.imread(path_to_pcd, cv2.IMREAD_ANYDEPTH)
         depth_image = o3d.geometry.Image(depth_image)
         intrinsic_matrix = np.asarray([[525.0, 0, 319.5], [0, 525.0, 239.5], [0, 0, 1]])
