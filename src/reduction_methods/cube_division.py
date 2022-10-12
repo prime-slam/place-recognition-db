@@ -32,10 +32,10 @@ class CubeDivision(ReductionMethod):
         )
 
         length = x_max - x_min
-        breadth = y_max - y_min
+        width = y_max - y_min
         height = z_max - z_min
 
-        side = gcd(length, gcd(breadth, height)) / self.cube_divider
+        side = gcd(length, gcd(width, height)) / self.cube_divider
 
         # Generating cubes
         def generate_segment(start, number_of_points):
@@ -44,9 +44,9 @@ class CubeDivision(ReductionMethod):
                 res_points.append(start + j * side)
             return res_points
 
-        cubes_x = generate_segment(x_min, int(length / side))
-        cubes_y = generate_segment(y_min, int(breadth / side))
-        cubes_z = generate_segment(z_min, int(height / side))
+        cubes_x = generate_segment(x_min, length // side)
+        cubes_y = generate_segment(y_min, width // side)
+        cubes_z = generate_segment(z_min, height // side)
 
         # Association of points with cubes
         cubes = dict()
@@ -73,7 +73,7 @@ class CubeDivision(ReductionMethod):
             else:
                 cubes[(x, y, z)] = np.asarray([point])
 
-        # Finding the closest point to the center in each cubergb
+        # Finding the closest point to the center in each cube
         res_indices = []
         for (x, y, z), enum_points in cubes.items():
             indices = enum_points[:, 3]
