@@ -1,4 +1,4 @@
-from math import floor, ceil, gcd
+from math import gcd
 from src.reduction_methods.reduction_method import ReductionMethod
 from src.database import Database
 
@@ -11,29 +11,20 @@ class CubeDivision(ReductionMethod):
     into many small cubes, in each of which only one pose is chosen
     """
 
-    def __init__(self, cube_divider: int):
+    def __init__(self, divider_factor: int):
         """
         Constructs CubeDivision reduction method
-        :param cube_divider: The side of the cube will be reduced by a factor of cube_divider
+        :param divider_factor: The side of the cube will be reduced by divider_factor
         """
-        self.cube_divider = cube_divider
+        self.cube_divider = divider_factor
 
     def reduce(self, db: Database) -> Database:
         traj = np.asarray(db.trajectory)
-        x_min, y_min, z_min = (
-            floor(min(traj[:, 0, 3])),
-            floor(min(traj[:, 1, 3])),
-            floor(min(traj[:, 2, 3])),
-        )
-        x_max, y_max, z_max = (
-            ceil(max(traj[:, 0, 3])),
-            ceil(max(traj[:, 1, 3])),
-            ceil(max(traj[:, 2, 3])),
-        )
-
-        length = x_max - x_min
-        width = y_max - y_min
-        height = z_max - z_min
+        xyz_traj = traj[:, :3, 3]
+        min_over_axes = np.floor(np.amin(xyz_traj, axis=0))
+        max_over_axes = np.ceil(np.amax(xyz_traj, axis=0))
+        x_min, y_min, z_min = min_over_axes
+        length, width, height = (max_over_axes - min_over_axes).astype(int)
 
         side = gcd(length, gcd(width, height)) / self.cube_divider
 
@@ -44,9 +35,9 @@ class CubeDivision(ReductionMethod):
                 res_points.append(start + j * side)
             return res_points
 
-        cubes_x = generate_segment(x_min, length // side)
-        cubes_y = generate_segment(y_min, width // side)
-        cubes_z = generate_segment(z_min, height // side)
+        cubes_x = generate_segment(x_min, int(length / side))
+        cubes_y = generate_segment(y_min, int(width / side))
+        cubes_z = generate_segment(z_min, int(height / side))
 
         # Association of points with cubes
         cubes = dict()
