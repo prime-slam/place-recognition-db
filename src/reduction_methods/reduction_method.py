@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.database import Database
+from src.core import Database
 
 
 class ReductionMethod(ABC):

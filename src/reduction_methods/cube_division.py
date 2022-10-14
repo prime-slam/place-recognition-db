@@ -1,8 +1,8 @@
-from math import gcd
-from src.reduction_methods.reduction_method import ReductionMethod
-from src.database import Database
-
 import numpy as np
+
+from math import gcd
+from src.core import Database
+from src.reduction_methods.reduction_method import ReductionMethod
 
 
 class CubeDivision(ReductionMethod):
@@ -77,8 +77,8 @@ class CubeDivision(ReductionMethod):
         res_indices.sort()
 
         new_traj = [db.trajectory[i] for i in res_indices]
-        new_rgb = [db.rgb_images_paths[i] for i in res_indices]
-        new_pcds = [db.pcds_paths[i] for i in res_indices]
-        return Database(new_traj, new_rgb, new_pcds, db.rgb_getter, db.pcd_getter)
+        new_rgb = [db.images[i] for i in res_indices]
+        new_pcds = [db.pcds[i] for i in res_indices]
+        return Database(new_traj, new_rgb, new_pcds)
 
     reduce.__doc__ = ReductionMethod.reduce.__doc__

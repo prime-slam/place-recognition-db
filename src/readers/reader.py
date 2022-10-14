@@ -1,28 +1,26 @@
 import open3d as o3d
+
 from abc import ABC, abstractmethod
 from nptyping import NDArray, Shape, Float, UInt8
-from src.database import Database
+from src.core import Database, Image, PointCloud
 
 
 class Reader(ABC):
     @abstractmethod
     def read_dataset(self) -> Database:
         rgb_images, pcds, trajectory = self._get_images_pcds_traj()
-        get_rgb_image, get_pcd = self._get_rgb, self._get_pcd
-        return Database(trajectory, rgb_images, pcds, get_rgb_image, get_pcd)
+        return Database(trajectory, rgb_images, pcds)
 
     @abstractmethod
     def _get_images_pcds_traj(
         self,
-    ) -> tuple[list[str], list[str], list[NDArray[Shape["4, 4"], Float]]]:
+    ) -> tuple[list[Image], list[PointCloud], list[NDArray[Shape["4, 4"], Float]]]:
         pass
 
-    @staticmethod
     @abstractmethod
-    def _get_rgb(path_to_image: str) -> NDArray[Shape["*, *, 3"], UInt8]:
+    def _get_rgb(self, path_to_image: str) -> NDArray[Shape["*, *, 3"], UInt8]:
         pass
 
-    @staticmethod
     @abstractmethod
-    def _get_pcd(path_to_pcd: str) -> o3d.geometry.PointCloud:
+    def _get_pcd(self, path_to_pcd: str) -> o3d.geometry.PointCloud:
         pass

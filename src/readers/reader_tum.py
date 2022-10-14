@@ -1,26 +1,36 @@
-import open3d as o3d
+import cv2
 import mrob
 import numpy as np
+import open3d as o3d
 import os
-import cv2
 
-from reader import Reader
-from nptyping import NDArray, Shape, Float, UInt8
+from nptyping import Float, NDArray, Shape, UInt8
 from pathlib import Path
-from src.database import Database
+from reader import Reader
+from src.core import Database, Image, PointCloud
 
 
 class ReaderTUM(Reader):
-    def __init__(self, path_to_dataset: str, max_difference: int = 1000):
+    def __init__(
+        self,
+        path_to_dataset: str,
+        intrinsics: NDArray[Shape["3, 3"], Float],
+        dist_coeff: NDArray[Shape["5"], Float],
+        max_difference: int = 1000,
+    ):
         self.path_to_dataset = path_to_dataset
         self.max_difference = max_difference
+        self.intrinsics = intrinsics
+        self.dist_coeff = dist_coeff
+        self._shape = 640, 480
+        self._depth_scale = 5000
 
     def read_dataset(self) -> Database:
         return super().read_dataset()
 
     def _get_images_pcds_traj(
         self,
-    ) -> tuple[list[str], list[str], list[NDArray[Shape["4, 4"], Float]]]:
+    ) -> tuple[list[Image], list[PointCloud], list[NDArray[Shape["4, 4"], Float]]]:
         depth_with_timestamps = self.__read_folder(
             os.path.join(self.path_to_dataset, "depth")
         )
@@ -30,33 +40,51 @@ class ReaderTUM(Reader):
         matches = self.__associate(rgb_with_timestamps, depth_with_timestamps)
         timestamps, traj = self.__read_trajectory()
         timestamps = np.asarray(timestamps)
-        images_paths = []
-        pcds_paths = []
+        images = []
+        pcds = []
         res_traj = []
-        for (a, b) in matches:
-            diff = abs(timestamps - np.mean([a, b]))
+        for (rgb_timestamp, depth_timestamp) in matches:
+            diff = abs(timestamps - np.mean([rgb_timestamp, depth_timestamp]))
             min_diff_ind = np.argmin(diff)
-            images_paths.append(rgb_with_timestamps[a])
-            pcds_paths.append(depth_with_timestamps[b])
+            images.append(Image(rgb_with_timestamps[rgb_timestamp], self._get_rgb))
+            pcds.append(
+                PointCloud(depth_with_timestamps[depth_timestamp], self._get_pcd)
+            )
             res_traj.append(traj[min_diff_ind])
-        return images_paths, pcds_paths, res_traj
+        return images, pcds, res_traj
 
-    @staticmethod
-    def _get_rgb(path_to_image: str) -> NDArray[Shape["*, *, 3"], UInt8]:
-        return cv2.imread(path_to_image, cv2.IMREAD_COLOR)
+    def _get_rgb(self, path_to_image: str) -> NDArray[Shape["*, *, 3"], UInt8]:
+        image = cv2.imread(path_to_image, cv2.IMREAD_COLOR)
+        color_undistorted, new_color_intrinsics = self.__undistort(image)
+        return color_undistorted
 
-    @staticmethod
-    def _get_pcd(path_to_pcd: str) -> o3d.geometry.PointCloud:
+    def _get_pcd(self, path_to_pcd: str) -> o3d.geometry.PointCloud:
         depth_image = cv2.imread(path_to_pcd, cv2.IMREAD_ANYDEPTH)
-        depth_image = o3d.geometry.Image(depth_image)
-        intrinsic_matrix = np.asarray([[525.0, 0, 319.5], [0, 525.0, 239.5], [0, 0, 1]])
+        depth_undistorted, new_depth_intrinsics = self.__undistort(depth_image)
+        depth_image = o3d.geometry.Image(depth_undistorted)
         intrinsic = o3d.camera.PinholeCameraIntrinsic()
-        intrinsic.intrinsic_matrix = intrinsic_matrix
-        intrinsic.width, intrinsic.height = 640, 480
+        intrinsic.intrinsic_matrix = new_depth_intrinsics
+        intrinsic.width, intrinsic.height = self._shape
         pcd = o3d.geometry.PointCloud.create_from_depth_image(
-            depth_image, intrinsic, depth_scale=5000
+            depth_image, intrinsic, depth_scale=self._depth_scale
         )
         return pcd
+
+    def __undistort(self, image):
+        shape = image.shape[:2][::-1]
+        undist_intrinsics, _ = cv2.getOptimalNewCameraMatrix(
+            self.intrinsics, self.dist_coeff, shape, 1, shape
+        )
+        map_x, map_y = cv2.initUndistortRectifyMap(
+            self.intrinsics,
+            self.dist_coeff,
+            None,
+            undist_intrinsics,
+            shape,
+            cv2.CV_32FC1,
+        )
+        undistorted = cv2.remap(image, map_x, map_y, cv2.INTER_NEAREST)
+        return undistorted, undist_intrinsics
 
     def __read_trajectory(
         self,
