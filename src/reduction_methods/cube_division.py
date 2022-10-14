@@ -1,6 +1,5 @@
 import numpy as np
 
-from math import gcd
 from src.core import Database
 from src.reduction_methods.reduction_method import ReductionMethod
 
@@ -11,53 +10,45 @@ class CubeDivision(ReductionMethod):
     into many small cubes, in each of which only one pose is chosen
     """
 
-    def __init__(self, divider_factor: int):
+    def __init__(self, cube_size: float):
         """
         Constructs CubeDivision reduction method
-        :param divider_factor: The side of the cube will be reduced by divider_factor
+        :param cube_size: The size of the cubes into which the cuboid will be divided
         """
-        self.cube_divider = divider_factor
+        self.cube_size = cube_size
 
     def reduce(self, db: Database) -> Database:
         traj = np.asarray(db.trajectory)
         xyz_traj = traj[:, :3, 3]
-        min_over_axes = np.floor(np.amin(xyz_traj, axis=0))
-        max_over_axes = np.ceil(np.amax(xyz_traj, axis=0))
+        min_over_axes = np.amin(xyz_traj, axis=0)
+        max_over_axes = np.amax(xyz_traj, axis=0)
         x_min, y_min, z_min = min_over_axes
-        length, width, height = (max_over_axes - min_over_axes).astype(int)
-
-        side = gcd(length, gcd(width, height)) / self.cube_divider
+        length, width, height = (
+            np.ceil((max_over_axes - min_over_axes) / self.cube_size) * self.cube_size
+        )
 
         # Generating cubes
         def generate_segment(start, number_of_points):
             res_points = []
             for j in range(number_of_points):
-                res_points.append(start + j * side)
-            return res_points
+                res_points.append(start + j * self.cube_size)
+            return np.asarray(res_points)
 
-        cubes_x = generate_segment(x_min, int(length / side))
-        cubes_y = generate_segment(y_min, int(width / side))
-        cubes_z = generate_segment(z_min, int(height / side))
+        cubes_x = generate_segment(x_min, int(length / self.cube_size))
+        cubes_y = generate_segment(y_min, int(width / self.cube_size))
+        cubes_z = generate_segment(z_min, int(height / self.cube_size))
 
         # Association of points with cubes
         cubes = dict()
         for i, trans_matrix in enumerate(traj):
             point = trans_matrix[:3, 3]
 
-            def find_cube_coordinate(axis, coordinate):
-                res = None
-                for j in range(len(axis)):
-                    if axis[j] <= coordinate:
-                        res = axis[j]
-                    else:
-                        break
-                return res
-
             x, y, z = (
-                find_cube_coordinate(cubes_x, point[0]),
-                find_cube_coordinate(cubes_y, point[1]),
-                find_cube_coordinate(cubes_z, point[2]),
+                cubes_x[cubes_x.searchsorted(point[0], side="right") - 1],
+                cubes_y[cubes_y.searchsorted(point[1], side="right") - 1],
+                cubes_z[cubes_z.searchsorted(point[2], side="right") - 1],
             )
+
             point = np.append(point, i)
             if (x, y, z) in cubes:
                 cubes[(x, y, z)] = np.append(cubes[(x, y, z)], [point], axis=0)
@@ -69,7 +60,11 @@ class CubeDivision(ReductionMethod):
         for (x, y, z), enum_points in cubes.items():
             indices = enum_points[:, 3]
             points = enum_points[:, :3]
-            cube_center = (x + side / 2, y + side / 2, z + side / 2)
+            cube_center = (
+                x + self.cube_size / 2,
+                y + self.cube_size / 2,
+                z + self.cube_size / 2,
+            )
             distances = np.apply_along_axis(
                 lambda p: np.linalg.norm(p - cube_center), axis=1, arr=points
             )
