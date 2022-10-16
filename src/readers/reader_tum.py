@@ -37,20 +37,22 @@ class ReaderTUM(Reader):
         rgb_with_timestamps = self.__read_folder(
             os.path.join(self.path_to_dataset, "rgb")
         )
-        matches = self.__associate(rgb_with_timestamps, depth_with_timestamps)
-        timestamps, traj = self.__read_trajectory()
-        timestamps = np.asarray(timestamps)
+        matches = self.__associate_depth_with_rgb(
+            rgb_with_timestamps, depth_with_timestamps
+        )
+        traj_timestamps, traj = self.__read_trajectory()
         images = []
         pcds = []
         res_traj = []
         for (rgb_timestamp, depth_timestamp) in matches:
-            diff = abs(timestamps - np.mean([rgb_timestamp, depth_timestamp]))
-            min_diff_ind = np.argmin(diff)
+            associated_pose_index = self.__associate_depth_and_rgb_with_traj(
+                traj_timestamps, rgb_timestamp, depth_timestamp
+            )
+            res_traj.append(traj[associated_pose_index])
             images.append(Image(rgb_with_timestamps[rgb_timestamp], self._get_rgb))
             pcds.append(
                 PointCloud(depth_with_timestamps[depth_timestamp], self._get_pcd)
             )
-            res_traj.append(traj[min_diff_ind])
         return images, pcds, res_traj
 
     def _get_rgb(self, path_to_image: str) -> NDArray[Shape["*, *, 3"], UInt8]:
@@ -113,10 +115,10 @@ class ReaderTUM(Reader):
         files = os.listdir(path_to_folder)
         timestamps = [float(Path(file).stem) for file in files]
         files = [os.path.join(path_to_folder, x) for x in files]
-        timestamp_image_kvp = dict(zip(timestamps, files))
-        return timestamp_image_kvp
+        timestamp_image_key_value_pairs = dict(zip(timestamps, files))
+        return timestamp_image_key_value_pairs
 
-    def __associate(
+    def __associate_depth_with_rgb(
         self, rgb_with_timestamps: dict, depth_with_timestamps: dict
     ) -> list:
         color_keys = np.asarray(list(rgb_with_timestamps.keys()))
@@ -127,3 +129,12 @@ class ReaderTUM(Reader):
             if abs(best_match - timestamp) < self.max_difference:
                 best_matches.append((timestamp, best_match))
         return sorted(best_matches)
+
+    @staticmethod
+    def __associate_depth_and_rgb_with_traj(
+        traj_timestamps: list[float], rgb_timestamp: float, depth_timestamp: float
+    ):
+        diff = abs(
+            np.asarray(traj_timestamps) - np.mean([rgb_timestamp, depth_timestamp])
+        )
+        return np.argmin(diff)
