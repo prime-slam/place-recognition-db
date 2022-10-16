@@ -3,6 +3,7 @@ import numpy as np
 import open3d as o3d
 import os
 
+from nptyping import Float, NDArray, Shape
 from src.core.database import Database
 
 
@@ -34,16 +35,21 @@ class Exporter:
         os.mkdir(path_to_pcds)
         return path_to_traj, path_to_rgb, path_to_pcds
 
+    @staticmethod
+    def __pose_to_string(pose: NDArray[Shape["4, 4"], Float]) -> str:
+        R = pose[:3, :3].astype(np.str)
+        t = pose[:3, 3].astype(np.str)
+        flatten_pose = np.concatenate((R.flatten(), t))
+        pose_string = " ".join(flatten_pose)
+        return pose_string
+
     def export(self, path_to_save: str, db: Database):
         path_to_traj, path_to_rgb, path_to_pcds = self.__create_export_infrastructure(
             path_to_save
         )
         with open(path_to_traj, "w") as traj:
             for pose in db.trajectory:
-                R = pose[:3, :3].astype(np.str)
-                t = pose[:3, 3].astype(np.str)
-                flatten_pose = np.concatenate((R.flatten(), t))
-                pose_string = " ".join(flatten_pose)
+                pose_string = self.__pose_to_string(pose)
                 traj.write(f"{pose_string}\n")
         for i in range(len(db)):
             image = db.get_rgb_image_by_index(i)
