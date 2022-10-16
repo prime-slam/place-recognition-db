@@ -28,15 +28,9 @@ class CubeDivision(ReductionMethod):
         )
 
         # Generating cubes
-        def generate_segment(start, number_of_points):
-            res_points = []
-            for j in range(number_of_points):
-                res_points.append(start + j * self.cube_size)
-            return np.asarray(res_points)
-
-        cubes_x = generate_segment(x_min, int(length / self.cube_size))
-        cubes_y = generate_segment(y_min, int(width / self.cube_size))
-        cubes_z = generate_segment(z_min, int(height / self.cube_size))
+        cubes_x = np.arange(x_min, x_min + length, self.cube_size)
+        cubes_y = np.arange(y_min, y_min + width, self.cube_size)
+        cubes_z = np.arange(z_min, z_min + height, self.cube_size)
 
         # Association of points with cubes
         cubes = dict()
