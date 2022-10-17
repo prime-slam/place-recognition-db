@@ -6,7 +6,6 @@ from src.core import Database, Image, PointCloud
 
 
 class Reader(ABC):
-    @abstractmethod
     def read_dataset(self) -> Database:
         rgb_images, pcds, trajectory = self._get_images_pcds_traj()
         return Database(trajectory, rgb_images, pcds)

@@ -7,7 +7,7 @@ import os
 from nptyping import Float, NDArray, Shape, UInt8
 from pathlib import Path
 from reader import Reader
-from src.core import Database, Image, PointCloud
+from src.core import Image, PointCloud
 
 
 class ReaderTUM(Reader):
@@ -24,9 +24,6 @@ class ReaderTUM(Reader):
         self.dist_coeff = dist_coeff
         self._shape = 640, 480
         self._depth_scale = 5000
-
-    def read_dataset(self) -> Database:
-        return super().read_dataset()
 
     def _get_images_pcds_traj(
         self,
