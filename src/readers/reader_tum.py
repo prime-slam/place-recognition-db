@@ -121,10 +121,10 @@ class ReaderTUM(Reader):
         color_keys = np.asarray(list(rgb_with_timestamps.keys()))
         depth_keys = np.asarray(list(depth_with_timestamps.keys()))
         best_matches = list()
-        for timestamp in color_keys:
-            best_match = depth_keys[np.argmin(np.abs(depth_keys - timestamp))]
+        for timestamp in depth_keys:
+            best_match = color_keys[np.argmin(np.abs(color_keys - timestamp))]
             if abs(best_match - timestamp) < self.max_difference:
-                best_matches.append((timestamp, best_match))
+                best_matches.append((best_match, timestamp))
         return sorted(best_matches)
 
     @staticmethod
