@@ -2,7 +2,7 @@ import open3d as o3d
 
 from abc import ABC, abstractmethod
 from nptyping import NDArray, Shape, Float, UInt8
-from src.core import Database, Image, PointCloud
+from src.core import Database, ImageProvider, PointCloudProvider
 
 
 class Reader(ABC):
@@ -13,7 +13,11 @@ class Reader(ABC):
     @abstractmethod
     def _get_images_pcds_traj(
         self,
-    ) -> tuple[list[Image], list[PointCloud], list[NDArray[Shape["4, 4"], Float]]]:
+    ) -> tuple[
+        list[ImageProvider],
+        list[PointCloudProvider],
+        list[NDArray[Shape["4, 4"], Float]],
+    ]:
         pass
 
     @abstractmethod
@@ -21,5 +25,5 @@ class Reader(ABC):
         pass
 
     @abstractmethod
-    def _get_pcd(self, path_to_pcd: str) -> o3d.geometry.PointCloud:
+    def _get_pcd(self, path_to_pcd: str) -> o3d.t.geometry.PointCloud:
         pass
