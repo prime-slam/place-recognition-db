@@ -1,5 +1,3 @@
-import copy
-
 from src.core import Database, voxel_down_sample, VoxelGrid
 from src.metrics.reduction_metric import ReductionMetric
 from tqdm.contrib import tzip
@@ -29,7 +27,7 @@ class NotCoveredFrames(ReductionMetric):
                 continue
             pcd = pcd_raw.point_cloud.transform(pose)
             pcd = voxel_down_sample(pcd, voxel_grid)
-            united_map = copy.deepcopy(filtered_db_map)
+            united_map = filtered_db_map.clone()
             united_map += pcd
             united_map = voxel_down_sample(united_map, voxel_grid)
             difference = len(united_map.point.positions) - len(
