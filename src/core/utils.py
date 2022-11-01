@@ -8,7 +8,7 @@ def voxel_down_sample(
     voxel_grid: VoxelGrid,
 ) -> o3d.t.geometry.PointCloud:
     """
-    Voxel down sampling with bounds given
+    Voxel down sampling with voxel grid given
     :param point_cloud: Point cloud for down sampling
     :param voxel_grid: Voxel grid for down sampling
     :return: Down sampled point cloud

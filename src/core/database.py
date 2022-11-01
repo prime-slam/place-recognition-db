@@ -54,7 +54,7 @@ class Database:
     ) -> o3d.t.geometry.PointCloud:
         """
         Builds sparse map of the whole DB scene
-        :param voxel_grid: Voxel grid for down_sampling
+        :param voxel_grid: Voxel grid for down sampling
         :param down_sample_step: Voxel down sampling step for reducing RAM usage
         :return: Resulting point cloud of the scene
         """
