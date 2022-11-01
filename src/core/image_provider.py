@@ -2,7 +2,7 @@ from nptyping import NDArray, Shape, UInt8
 from typing import Callable
 
 
-class Image:
+class ImageProvider:
     def __init__(
         self,
         path_to_image: str,
@@ -11,5 +11,6 @@ class Image:
         self._path_to_image = path_to_image
         self._getter = getter
 
-    def read(self) -> NDArray[Shape["*, *, 3"], UInt8]:
+    @property
+    def image(self) -> NDArray[Shape["*, *, 3"], UInt8]:
         return self._getter(self._path_to_image)
