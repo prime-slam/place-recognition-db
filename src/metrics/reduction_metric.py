@@ -17,15 +17,3 @@ class ReductionMetric(ABC):
         :return: Result of the metric
         """
         pass
-
-    @abstractmethod
-    def evaluate_many(
-        self, original_db: Database, filtered_dbs: list[Database]
-    ) -> list[Number]:
-        """
-        Method for calculating the results of the metric for list of filtered DBs
-        :param original_db: Original database
-        :param filtered_dbs: Reduced databases
-        :return: Results of the metric
-        """
-        pass
