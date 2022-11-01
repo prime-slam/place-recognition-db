@@ -1,7 +1,6 @@
 import copy
 
-from nptyping import Float, NDArray, Shape
-from src.core import Database, PointCloud
+from src.core import Database, voxel_down_sample, VoxelGrid
 from src.metrics.reduction_metric import ReductionMetric
 from tqdm.contrib import tzip
 
@@ -21,45 +20,24 @@ class NotCoveredFrames(ReductionMetric):
         self.voxel_size = voxel_size
 
     def evaluate(self, original_db: Database, filtered_db: Database) -> int:
-        bounds = original_db.get_bounds()
-        result = self._evaluate_with_bounds(original_db, filtered_db, bounds)
+        min_bounds, max_bounds = original_db.bounds
+        voxel_grid = VoxelGrid(min_bounds, max_bounds, self.voxel_size)
+        filtered_db_map = filtered_db.build_sparse_map(voxel_grid)
+        result = 0
+        for pose, pcd_raw in tzip(original_db.trajectory, original_db.pcds):
+            if pcd_raw in filtered_db.pcds:
+                continue
+            pcd = pcd_raw.point_cloud.transform(pose)
+            pcd = voxel_down_sample(pcd, voxel_grid)
+            united_map = copy.deepcopy(filtered_db_map)
+            united_map += pcd
+            united_map = voxel_down_sample(united_map, voxel_grid)
+            difference = len(united_map.point.positions) - len(
+                filtered_db_map.point.positions
+            )
+            pcd_length = len(pcd.point.positions)
+            if ((pcd_length - difference) / pcd_length) < self.threshold:
+                result += 1
         return result
 
     evaluate.__doc__ = ReductionMetric.evaluate.__doc__
-
-    def evaluate_many(
-        self, original_db: Database, filtered_dbs: list[Database]
-    ) -> list[int]:
-        bounds = original_db.get_bounds()
-
-        results = []
-        for filtered_db in filtered_dbs:
-            results.append(self._evaluate_with_bounds(original_db, filtered_db, bounds))
-
-        return results
-
-    evaluate_many.__doc__ = ReductionMetric.evaluate_many.__doc__
-
-    def _evaluate_with_bounds(
-        self,
-        original_db: Database,
-        filtered_db: Database,
-        bounds: tuple[NDArray[Shape["3"], Float], NDArray[Shape["3"], Float]],
-    ) -> int:
-        filtered_db_map = filtered_db.build_sparse_map(bounds, self.voxel_size)
-        result = 0
-        for pose, pcd in tzip(original_db.trajectory, original_db.pcds):
-            if pcd in filtered_db.pcds:
-                continue
-            pcd = pcd.read().transform(pose)
-            pcd = PointCloud.voxel_down_sample(pcd, bounds, self.voxel_size)
-            united_map = copy.deepcopy(filtered_db_map)
-            united_map += pcd
-            united_map = PointCloud.voxel_down_sample(
-                united_map, bounds, self.voxel_size
-            )
-            difference = len(united_map.points) - len(filtered_db_map.points)
-            if ((len(pcd.points) - difference) / len(pcd.points)) < self.threshold:
-                result += 1
-
-        return result
