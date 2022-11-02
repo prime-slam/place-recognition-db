@@ -4,6 +4,7 @@ import open3d as o3d
 import os
 
 from nptyping import Float, NDArray, Shape
+
 from src.core.database import Database
 
 

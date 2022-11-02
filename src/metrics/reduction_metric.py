@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from numbers import Number
+
 from src.core import Database
 
 

@@ -2,6 +2,7 @@ import open3d as o3d
 
 from abc import ABC, abstractmethod
 from nptyping import NDArray, Shape, Float, UInt8
+
 from src.core import Database
 from src.loaders.providers import ImageProvider, PointCloudProvider
 

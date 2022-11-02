@@ -4,6 +4,7 @@ import open3d as o3d
 from dataclasses import dataclass
 from functools import cached_property
 from nptyping import Float, NDArray, Shape, UInt8
+
 from src.core.cache import memory
 from src.core.utils import voxel_down_sample
 from src.core.voxel_grid import VoxelGrid

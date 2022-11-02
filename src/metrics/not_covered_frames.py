@@ -1,6 +1,7 @@
+from tqdm.contrib import tzip
+
 from src.core import Database, voxel_down_sample, VoxelGrid
 from src.metrics.reduction_metric import ReductionMetric
-from tqdm.contrib import tzip
 
 
 class NotCoveredFrames(ReductionMetric):
