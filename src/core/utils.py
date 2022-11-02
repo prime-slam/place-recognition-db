@@ -9,6 +9,9 @@ def voxel_down_sample(
 ) -> o3d.t.geometry.PointCloud:
     """
     Voxel down sampling with voxel grid given
+
+    This method is implemented in the legacy point cloud,
+    but is still missing in the tensor point cloud in Open3D 0.16.0
     :param point_cloud: Point cloud for down sampling
     :param voxel_grid: Voxel grid for down sampling
     :return: Down sampled point cloud
