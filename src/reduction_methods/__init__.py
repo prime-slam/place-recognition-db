@@ -2,3 +2,4 @@ from src.reduction_methods.cube_division import CubeDivision
 from src.reduction_methods.distance_vector import DistanceVector
 from src.reduction_methods.distance_vector_seq import DistanceVectorSeq
 from src.reduction_methods.every_nth import EveryNth
+from src.reduction_methods.reduction_method import ReductionMethod
