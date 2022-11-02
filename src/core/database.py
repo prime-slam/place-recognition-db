@@ -12,20 +12,20 @@ from src.loaders.providers import ImageProvider, PointCloudProvider
 
 
 @memory.cache
-def _build_sparse_map(
+def _build_sparse_map_with_caching(
     trajectory: list[NDArray[Shape["4, 4"], Float]],
     pcds: list[PointCloudProvider],
     voxel_grid: VoxelGrid,
     down_sample_step: int = 100,
 ) -> o3d.t.geometry.PointCloud:
-    global_pcd = o3d.t.geometry.PointCloud()
-    global_pcd.point.positions = o3d.core.Tensor.empty((0, 3))
+    map_pcd = o3d.t.geometry.PointCloud()
+    map_pcd.point.positions = o3d.core.Tensor.empty((0, 3))
     for i, (pose, pcd_raw) in enumerate(zip(trajectory, pcds)):
         pcd = pcd_raw.point_cloud.transform(pose)
-        global_pcd += pcd
+        map_pcd += pcd
         if i % down_sample_step == 0:
-            global_pcd = voxel_down_sample(global_pcd, voxel_grid)
-    return voxel_down_sample(global_pcd, voxel_grid)
+            map_pcd = voxel_down_sample(map_pcd, voxel_grid)
+    return voxel_down_sample(map_pcd, voxel_grid)
 
 
 @dataclass(frozen=True)
@@ -47,7 +47,7 @@ class Database:
     def get_pcd_by_index(self, n: int) -> o3d.geometry.PointCloud:
         return self.pcds[n].point_cloud
 
-    def build_sparse_map(
+    def build_sparse_map_with_caching(
         self,
         voxel_grid: VoxelGrid,
         down_sample_step: int = 100,
@@ -58,7 +58,7 @@ class Database:
         :param down_sample_step: Voxel down sampling step for reducing RAM usage
         :return: Resulting point cloud of the scene
         """
-        return _build_sparse_map(
+        return _build_sparse_map_with_caching(
             self.trajectory, self.pcds, voxel_grid, down_sample_step
         )
 

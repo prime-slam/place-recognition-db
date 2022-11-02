@@ -21,7 +21,7 @@ class NotCoveredFrames(ReductionMetric):
     def evaluate(self, original_db: Database, filtered_db: Database) -> int:
         min_bounds, max_bounds = original_db.bounds
         voxel_grid = VoxelGrid(min_bounds, max_bounds, self.voxel_size)
-        filtered_db_map = filtered_db.build_sparse_map(voxel_grid)
+        filtered_db_map = filtered_db.build_sparse_map_with_caching(voxel_grid)
         result = 0
         for pose, pcd_raw in tzip(original_db.trajectory, original_db.pcds):
             if pcd_raw in filtered_db.pcds:
