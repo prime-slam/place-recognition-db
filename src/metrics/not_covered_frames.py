@@ -22,9 +22,10 @@ class NotCoveredFrames(ReductionMetric):
         min_bounds, max_bounds = original_db.bounds
         voxel_grid = VoxelGrid(min_bounds, max_bounds, self.voxel_size)
         filtered_db_map = filtered_db.build_sparse_map_with_caching(voxel_grid)
-        result = 0
+        filtered_db_map_pcds_set = set(filtered_db.pcds)
+        not_covered_frames = 0
         for pose, pcd_raw in tzip(original_db.trajectory, original_db.pcds):
-            if pcd_raw in filtered_db.pcds:
+            if pcd_raw in filtered_db_map_pcds_set:
                 continue
             pcd = pcd_raw.point_cloud.transform(pose)
             pcd = voxel_down_sample(pcd, voxel_grid)
@@ -36,7 +37,7 @@ class NotCoveredFrames(ReductionMetric):
             )
             pcd_length = len(pcd.point.positions)
             if ((pcd_length - difference) / pcd_length) < self.threshold:
-                result += 1
-        return result
+                not_covered_frames += 1
+        return not_covered_frames
 
     evaluate.__doc__ = ReductionMetric.evaluate.__doc__
