@@ -13,7 +13,7 @@ class NotCoveredFrames(ReductionMetric):
         """
         Constructs CoverageDiscarded reduction metric
         :param voxel_size: Voxel size for down sampling
-        :param threshold: Coverage threshold for the frame to be considered uncovered
+        :param threshold: Percentage of frame coverage, below which the frame will be considered uncovered
         """
         self.threshold = threshold
         self.voxel_size = voxel_size
