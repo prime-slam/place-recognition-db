@@ -6,8 +6,8 @@ import os
 
 from nptyping import Float, NDArray, Shape, UInt8
 from pathlib import Path
-from reader import Reader
-from src.core import ImageProvider, PointCloudProvider
+from src.loaders.providers import ImageProvider, PointCloudProvider
+from src.loaders.readers.reader import Reader
 
 
 class ReaderTUM(Reader):
