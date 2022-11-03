@@ -25,6 +25,7 @@ class NotCoveredFrames(ReductionMetric):
         filtered_db_map_pcds_set = set(filtered_db.pcds)
         not_covered_frames = 0
         for pose, pcd_raw in tzip(original_db.trajectory, original_db.pcds):
+            # This works using custom equality based on equality of paths to point clouds
             if pcd_raw in filtered_db_map_pcds_set:
                 continue
             pcd = pcd_raw.point_cloud.transform(pose)
