@@ -1,16 +1,13 @@
+from dataclasses import dataclass
 from nptyping import NDArray, Shape, UInt8
 from typing import Callable
 
 
+@dataclass(frozen=True)
 class ImageProvider:
-    def __init__(
-        self,
-        path_to_image: str,
-        getter: Callable[[str], NDArray[Shape["*, *, 3"], UInt8]],
-    ):
-        self._path_to_image = path_to_image
-        self._getter = getter
+    path_to_image: str
+    getter: Callable[[str], NDArray[Shape["*, *, 3"], UInt8]]
 
     @property
     def image(self) -> NDArray[Shape["*, *, 3"], UInt8]:
-        return self._getter(self._path_to_image)
+        return self.getter(self.path_to_image)
