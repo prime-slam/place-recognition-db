@@ -6,8 +6,9 @@ import os
 
 from nptyping import Float, NDArray, Shape, UInt8
 from pathlib import Path
-from reader import Reader
-from src.core import Image, PointCloud
+
+from src.loaders.providers import ImageProvider, PointCloudProvider
+from src.loaders.readers.reader import Reader
 
 
 class ReaderTUM(Reader):
@@ -22,12 +23,16 @@ class ReaderTUM(Reader):
         self.max_difference = max_difference
         self.intrinsics = intrinsics
         self.dist_coeff = dist_coeff
-        self._shape = 640, 480
         self._depth_scale = 5000
+        self._depth_max = 10
 
     def _get_images_pcds_traj(
         self,
-    ) -> tuple[list[Image], list[PointCloud], list[NDArray[Shape["4, 4"], Float]]]:
+    ) -> tuple[
+        list[ImageProvider],
+        list[PointCloudProvider],
+        list[NDArray[Shape["4, 4"], Float]],
+    ]:
         depth_with_timestamps = self.__read_folder(
             os.path.join(self.path_to_dataset, "depth")
         )
@@ -46,9 +51,13 @@ class ReaderTUM(Reader):
                 traj_timestamps, rgb_timestamp, depth_timestamp
             )
             res_traj.append(traj[associated_pose_index])
-            images.append(Image(rgb_with_timestamps[rgb_timestamp], self._get_rgb))
+            images.append(
+                ImageProvider(rgb_with_timestamps[rgb_timestamp], self._get_rgb)
+            )
             pcds.append(
-                PointCloud(depth_with_timestamps[depth_timestamp], self._get_pcd)
+                PointCloudProvider(
+                    depth_with_timestamps[depth_timestamp], self._get_pcd
+                )
             )
         return images, pcds, res_traj
 
@@ -57,15 +66,15 @@ class ReaderTUM(Reader):
         color_undistorted, new_color_intrinsics = self.__undistort(image)
         return color_undistorted
 
-    def _get_pcd(self, path_to_pcd: str) -> o3d.geometry.PointCloud:
+    def _get_pcd(self, path_to_pcd: str) -> o3d.t.geometry.PointCloud:
         depth_image = cv2.imread(path_to_pcd, cv2.IMREAD_ANYDEPTH)
         depth_undistorted, new_depth_intrinsics = self.__undistort(depth_image)
-        depth_image = o3d.geometry.Image(depth_undistorted)
-        intrinsic = o3d.camera.PinholeCameraIntrinsic()
-        intrinsic.intrinsic_matrix = new_depth_intrinsics
-        intrinsic.width, intrinsic.height = self._shape
-        pcd = o3d.geometry.PointCloud.create_from_depth_image(
-            depth_image, intrinsic, depth_scale=self._depth_scale
+        depth_image = o3d.t.geometry.Image(depth_undistorted)
+        pcd = o3d.t.geometry.PointCloud.create_from_depth_image(
+            depth_image,
+            new_depth_intrinsics,
+            depth_scale=self._depth_scale,
+            depth_max=self._depth_max,
         )
         return pcd
 

@@ -4,6 +4,7 @@ import open3d as o3d
 import os
 
 from nptyping import Float, NDArray, Shape
+
 from src.core.database import Database
 
 
@@ -55,4 +56,4 @@ class Exporter:
             image = db.get_rgb_image_by_index(i)
             cv2.imwrite(os.path.join(path_to_rgb, f"{i}.png"), image)
             pcd = db.get_pcd_by_index(i)
-            o3d.io.write_point_cloud(os.path.join(path_to_pcds, f"{i}.pcd"), pcd)
+            o3d.t.io.write_point_cloud(os.path.join(path_to_pcds, f"{i}.pcd"), pcd)
