@@ -64,6 +64,9 @@ class SetCover(ReductionMethod):
             chosen_frame = np.argmax(np.sum(coverage_mat, axis=1))
             coverage_mat = coverage_mat[:, coverage_mat[chosen_frame] == 0]
             chosen_frames.append(chosen_frame)
+            num_of_cols = coverage_mat.shape[1]
+            if num_of_cols == 0:
+                break
 
         chosen_frames.sort()
         new_traj = [db.trajectory[i] for i in chosen_frames]
