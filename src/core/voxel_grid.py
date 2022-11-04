@@ -16,6 +16,7 @@ class VoxelGrid:
         self, point: NDArray[Shape["3"], Float]
     ) -> tuple[int, int, int]:
         """
+        The method gets the voxel index for a given point
         Implemented according to the corresponding Open3D method
         :param point: Point to get its corresponding voxel index
         :return: Voxel index
