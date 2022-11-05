@@ -2,6 +2,7 @@ import numpy as np
 
 from nptyping import Float, NDArray, Shape
 from tqdm import tqdm
+from typing import Optional
 
 from src.core import Database, memory, voxel_down_sample, VoxelGrid
 from src.loaders.providers import PointCloudProvider
@@ -43,10 +44,11 @@ def _get_voxel_by_frames_coverage_matrix(
 class SetCover(ReductionMethod):
     """The method reduces database by set cover greedy algorithm"""
 
-    def __init__(self, db_size: int, voxel_size: float = 0.1):
+    def __init__(self, db_size: Optional[int] = None, voxel_size: float = 0.1):
         """
         Constructs SetCover reduction method
-        :param db_size: The number of frames that should remain after compression
+        :param db_size: The number of frames that should remain after compression.
+        If it is None, the process will continue until full coverage
         :param voxel_size: Voxel size for down sampling
         """
         self.db_size = db_size
@@ -60,7 +62,11 @@ class SetCover(ReductionMethod):
         )
 
         chosen_frames = []
-        for _ in tqdm(range(self.db_size)):
+        if self.db_size is None:
+            number_of_iterations = len(db)
+        else:
+            number_of_iterations = self.db_size
+        for _ in tqdm(range(number_of_iterations)):
             chosen_frame = np.argmax(np.sum(coverage_mat, axis=1))
             coverage_mat = coverage_mat[:, coverage_mat[chosen_frame] == 0]
             chosen_frames.append(chosen_frame)
