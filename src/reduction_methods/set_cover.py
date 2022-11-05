@@ -33,7 +33,7 @@ def _get_voxel_by_frames_coverage_matrix(
                 cur_voxel_num += 1
         frames_voxels.append(frame_voxels)
 
-    coverage_mat = np.zeros((len(frames_voxels), len(voxels_enum))).astype(np.uint8)
+    coverage_mat = np.zeros((len(frames_voxels), len(voxels_enum)), dtype=np.uint8)
 
     for i, voxels in enumerate(frames_voxels):
         coverage_mat[i, voxels] = 1
