@@ -3,7 +3,7 @@ PlaceRecognitionDB is a tool for creating optimally sized databases for place re
 
 Several methods of reducing the number of frames in databases have already been developed, as well as some metrics to evaluate the results of compression.
 
-The goal of the project is to create a tool with an optimal compression strategy for any RGBD and LiDAR data for the place recognition task.
+The goal of the project is to create a tool with an optimal compression strategy for any RGBD and LiDAR data.
 
 ## Repository structure
 ```
