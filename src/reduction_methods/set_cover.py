@@ -1,6 +1,7 @@
 import numpy as np
 
 from nptyping import Float, NDArray, Shape
+from scipy.sparse import csc_array, dok_array
 from tqdm import tqdm
 from typing import Optional
 
@@ -33,25 +34,34 @@ def _get_voxel_by_frames_coverage_matrix(
                 cur_voxel_num += 1
         frames_voxels.append(frame_voxels)
 
-    coverage_mat = np.zeros((len(frames_voxels), len(voxels_enum)), dtype=np.uint8)
+    coverage_mat = dok_array((len(frames_voxels), len(voxels_enum)), dtype=np.uint8)
 
     for i, voxels in enumerate(frames_voxels):
         coverage_mat[i, voxels] = 1
 
-    return coverage_mat
+    return coverage_mat.tocsc()
 
 
 class SetCover(ReductionMethod):
-    """The method reduces database by set cover greedy algorithm"""
+    """
+    The method reduces database by set cover greedy algorithm.
 
-    def __init__(self, db_size: Optional[int] = None, voxel_size: float = 0.1):
+    First, the algorithm selects a frame with the maximum coverage of scene voxels,
+    then these voxels are subtracted from all frames and considered to be covered.
+    The process continues recursively until full coverage is achieved,
+    or until a user-specified amount of frames is selected.
+    """
+
+    def __init__(
+        self, resulting_amount_of_frames: Optional[int] = None, voxel_size: float = 0.1
+    ):
         """
         Constructs SetCover reduction method
-        :param db_size: The number of frames that should remain after compression.
+        :param resulting_amount_of_frames: The number of frames that should remain after compression.
         If it is None, the process will continue until full coverage
         :param voxel_size: Voxel size for down sampling
         """
-        self.db_size = db_size
+        self.resulting_amount_of_frames = resulting_amount_of_frames
         self.voxel_size = voxel_size
 
     def reduce(self, db: Database) -> Database:
@@ -62,14 +72,19 @@ class SetCover(ReductionMethod):
         )
 
         chosen_frames = []
-        if self.db_size is None:
-            number_of_iterations = len(db)
-        else:
-            number_of_iterations = self.db_size
+        mask = np.full((coverage_mat.shape[1]), True)
+        number_of_iterations = (
+            len(db)
+            if self.resulting_amount_of_frames is None
+            else self.resulting_amount_of_frames
+        )
         for _ in tqdm(range(number_of_iterations)):
-            chosen_frame = np.argmax(np.sum(coverage_mat, axis=1))
-            coverage_mat = coverage_mat[:, coverage_mat[chosen_frame] == 0]
-            chosen_frames.append(chosen_frame)
+            chosen_frame_index = np.argmax(csc_array.sum(coverage_mat, axis=1))
+            non_zero_frame_indices = coverage_mat[[chosen_frame_index]].nonzero()[1]
+            mask[non_zero_frame_indices] = False
+            coverage_mat = coverage_mat[:, mask]
+            mask = mask[mask]
+            chosen_frames.append(chosen_frame_index)
             num_of_cols = coverage_mat.shape[1]
             if num_of_cols == 0:
                 break
