@@ -11,8 +11,8 @@ place-recognition-db
 ├── src -- code of the tool
 │	├── core
 |	├── loaders
-|   |   ├── providers -- providers for point clouds and RGB images
-|   |   └── readers -- classes for reading various datasets
+| |   ├── providers -- providers for point clouds and RGB images
+| |   └── readers -- classes for reading various datasets
 |	├── metrics -- metrics for evaluating data compression quality
 |	└── reduction_methods -- different strategies for reducing databases
 ├── .gitignore
