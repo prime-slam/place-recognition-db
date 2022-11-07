@@ -1,5 +1,5 @@
 # PlaceRecognitionDB
-PlaceRecognitionDB is a tool for creating optimally sized databases for place recognition task from RGBD and LiDAR data.
+PlaceRecognitionDB is a tool for creating optimally sized databases (containing the minimum number of frames covering the scene) for place recognition task from RGBD and LiDAR data.
 
 Several methods of reducing the number of frames in databases have already been developed, as well as some metrics to evaluate the results of compression.
 
