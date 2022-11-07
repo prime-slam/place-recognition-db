@@ -72,7 +72,7 @@ class SetCover(ReductionMethod):
         )
 
         chosen_frames = []
-        mask = np.full((coverage_mat.shape[1]), True)
+        covered_voxels_mask = np.full((coverage_mat.shape[1]), True)
         number_of_iterations = (
             len(db)
             if self.resulting_amount_of_frames is None
@@ -81,9 +81,9 @@ class SetCover(ReductionMethod):
         for _ in tqdm(range(number_of_iterations)):
             chosen_frame_index = np.argmax(csc_array.sum(coverage_mat, axis=1))
             non_zero_frame_indices = coverage_mat[[chosen_frame_index]].nonzero()[1]
-            mask[non_zero_frame_indices] = False
-            coverage_mat = coverage_mat[:, mask]
-            mask = mask[mask]
+            covered_voxels_mask[non_zero_frame_indices] = False
+            coverage_mat = coverage_mat[:, covered_voxels_mask]
+            covered_voxels_mask = covered_voxels_mask[covered_voxels_mask]
             chosen_frames.append(chosen_frame_index)
             num_of_cols = coverage_mat.shape[1]
             if num_of_cols == 0:
