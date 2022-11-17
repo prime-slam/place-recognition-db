@@ -8,7 +8,7 @@ from nptyping import Float, NDArray, Shape, UInt8
 from src.core.cache import memory
 from src.core.utils import voxel_down_sample
 from src.core.voxel_grid import VoxelGrid
-from src.loaders.providers import ImageProvider, PointCloudProvider
+from src.providers import ImageProvider, PointCloudProvider
 
 
 @memory.cache
