@@ -10,9 +10,7 @@ The goal of the project is to create a tool with an optimal compression strategy
 place-recognition-db
 ├── src — code of the tool
 |   ├── core
-|   ├── loaders
-|   |   ├── providers — providers for point clouds and RGB images
-|   |   └── readers — classes for reading various datasets
+|   ├── providers — providers for point clouds and RGB images
 |   ├── metrics — metrics for evaluating data compression quality
 |   └── reduction_methods — different strategies for reducing databases
 ├── .gitignore
