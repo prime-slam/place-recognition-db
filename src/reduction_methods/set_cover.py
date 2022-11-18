@@ -6,7 +6,7 @@ from tqdm import tqdm
 from typing import Optional
 
 from src.core import Database, memory, voxel_down_sample, VoxelGrid
-from src.loaders.providers import PointCloudProvider
+from src.providers import PointCloudProvider
 from src.reduction_methods.reduction_method import ReductionMethod
 
 
