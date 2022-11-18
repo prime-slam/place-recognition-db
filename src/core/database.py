@@ -8,7 +8,7 @@ from nptyping import Float, NDArray, Shape, UInt8
 from src.core.cache import memory
 from src.core.utils import voxel_down_sample
 from src.core.voxel_grid import VoxelGrid
-from src.providers import ImageProvider, PointCloudProvider
+from src.providers import ColorImageProvider, PointCloudProvider
 
 
 @memory.cache
@@ -31,7 +31,7 @@ def _build_sparse_map_with_caching(
 @dataclass(frozen=True)
 class Database:
     trajectory: list[NDArray[Shape["4, 4"], Float]]
-    images: list[ImageProvider]
+    images: list[ColorImageProvider]
     pcds: list[PointCloudProvider]
 
     def __post_init__(self):
@@ -42,7 +42,7 @@ class Database:
         return len(self.trajectory)
 
     def get_rgb_image_by_index(self, n: int) -> NDArray[Shape["*, *, 3"], UInt8]:
-        return self.images[n].image
+        return self.images[n].color_image
 
     def get_pcd_by_index(self, n: int) -> o3d.geometry.PointCloud:
         return self.pcds[n].point_cloud

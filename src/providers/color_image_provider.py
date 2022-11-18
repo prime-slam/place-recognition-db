@@ -5,9 +5,9 @@ from nptyping import NDArray, Shape, UInt8
 
 
 @dataclass(frozen=True)
-class ImageProvider:
+class ColorImageProvider:
     path_to_image: str
 
     @property
-    def image(self) -> NDArray[Shape["*, *, 3"], UInt8]:
+    def color_image(self) -> NDArray[Shape["*, *, 3"], UInt8]:
         return cv2.imread(self.path_to_image, cv2.IMREAD_COLOR)
