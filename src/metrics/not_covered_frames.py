@@ -1,3 +1,6 @@
+import os
+
+from joblib import Parallel, delayed
 from tqdm.contrib import tzip
 
 from src.core import Database, voxel_down_sample, VoxelGrid
@@ -21,24 +24,27 @@ class NotCoveredFrames(ReductionMetric):
     def evaluate(self, original_db: Database, filtered_db: Database) -> int:
         min_bounds, max_bounds = original_db.bounds
         voxel_grid = VoxelGrid(min_bounds, max_bounds, self.voxel_size)
-        filtered_db_map = filtered_db.build_sparse_map_with_caching(voxel_grid)
+        filtered_db_map_len = len(
+            filtered_db.build_sparse_map_with_caching(voxel_grid).point.positions
+        )
         filtered_db_map_pcds_set = set(filtered_db.pcds)
-        not_covered_frames = 0
-        for pose, pcd_raw in tzip(original_db.trajectory, original_db.pcds):
-            # This works using custom equality based on equality of paths to point clouds
+
+        def is_not_covered(pose, pcd_raw):
             if pcd_raw in filtered_db_map_pcds_set:
-                continue
+                return False
             pcd = pcd_raw.point_cloud.transform(pose)
             pcd = voxel_down_sample(pcd, voxel_grid)
-            united_map = filtered_db_map.clone()
+            united_map = filtered_db.build_sparse_map_with_caching(voxel_grid)
             united_map += pcd
             united_map = voxel_down_sample(united_map, voxel_grid)
-            difference = len(united_map.point.positions) - len(
-                filtered_db_map.point.positions
-            )
+            difference = len(united_map.point.positions) - filtered_db_map_len
             pcd_length = len(pcd.point.positions)
-            if ((pcd_length - difference) / pcd_length) < self.threshold:
-                not_covered_frames += 1
-        return not_covered_frames
+            return ((pcd_length - difference) / pcd_length) < self.threshold
+
+        coverage_results = Parallel(n_jobs=os.cpu_count())(
+            delayed(is_not_covered)(pose, pcd_raw)
+            for pose, pcd_raw in tzip(original_db.trajectory, original_db.pcds)
+        )
+        return sum(coverage_results)
 
     evaluate.__doc__ = ReductionMetric.evaluate.__doc__
