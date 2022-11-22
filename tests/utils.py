@@ -12,10 +12,3 @@ def generate_trajectory_from_positions(
         pose[:3, 3] = xyz
         poses.append(np.asarray(pose))
     return poses
-
-
-def extract_positions_from_trajectory(
-    trajectory: list[NDArray[Shape["4, 4"], Float]]
-) -> list:
-    positions = [pose[:3, 3].tolist() for pose in trajectory]
-    return positions
