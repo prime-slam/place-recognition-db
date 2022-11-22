@@ -29,7 +29,11 @@ thresholds = np.arange(0.1, 0.9, 0.1)
     "threshold",
     thresholds,
 )
-def test_not_covered_frames(threshold: float):
+def test_not_covered_frames_ordering(threshold: float):
+    """
+    Checks that the number of uncovered frames increases
+    as the number of frames in the new database decreases
+    """
     metric_results = []
     for filtered_db in filtered_dbs:
         metric_result = NotCoveredFrames(threshold).evaluate(real_db, filtered_db)

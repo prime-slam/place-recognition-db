@@ -13,7 +13,12 @@ for i in range(len(real_db)):
 metric_results = np.asarray(metric_results)
 
 
-def test_spatial_coverage():
+def test_spatial_coverage_ordering():
+    """
+    Checks that the result of the metric decreases
+    with a decrease in the number of frames in the filtered database
+    :return:
+    """
     assert np.all(metric_results[:-1] < metric_results[1:])
 
 
