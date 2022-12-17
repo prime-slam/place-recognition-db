@@ -1,3 +1,4 @@
+faiss_cpu==1.7.3
 mrob==0.0.8
 nptyping==2.3.1
 numpy==1.23.3
@@ -5,4 +6,6 @@ open3d==0.16.0
 opencv_python==4.6.0.66
 pytest==7.1.3
 scipy==1.9.1
+torch==1.13.1
+torchvision==0.14.1
 tqdm==4.64.1
