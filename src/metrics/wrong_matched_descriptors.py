@@ -1,8 +1,6 @@
 import faiss
 
-from tqdm import tqdm
-
-from src.core import Database, voxel_down_sample, VoxelGrid
+from src.core import calculate_point_cloud_coverage, Database, VoxelGrid
 from src.cos_place import CosPlace
 from src.metrics.reduction_metric import ReductionMetric
 
@@ -49,9 +47,7 @@ class WrongMatchedDescriptors(ReductionMetric):
         voxel_grid = VoxelGrid(min_bounds, max_bounds, self.voxel_size)
 
         not_covered = 0
-        for query_index, prediction in tqdm(
-            enumerate(predictions), total=len(predictions)
-        ):
+        for query_index, prediction in enumerate(predictions):
             query_pcd = queries_db.get_pcd_by_index(query_index)
             query_pose = queries_db.trajectory[query_index]
             db_pcd = filtered_db.get_pcd_by_index(prediction[0])
@@ -60,13 +56,8 @@ class WrongMatchedDescriptors(ReductionMetric):
             query_pcd = query_pcd.transform(query_pose)
             db_pcd = db_pcd.transform(db_pose)
 
-            query_pcd = voxel_down_sample(query_pcd, voxel_grid)
-            db_pcd = voxel_down_sample(db_pcd, voxel_grid)
-
-            united_map = voxel_down_sample(query_pcd + db_pcd, voxel_grid)
-            difference = len(united_map.point.positions) - len(db_pcd.point.positions)
-            query_size = len(query_pcd.point.positions)
-            if ((query_size - difference) / query_size) <= self.threshold:
+            coverage = calculate_point_cloud_coverage(query_pcd, db_pcd, voxel_grid)
+            if coverage <= self.threshold:
                 not_covered += 1
 
         return not_covered
