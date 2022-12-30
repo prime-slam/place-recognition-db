@@ -1,9 +1,8 @@
 import os
 
 from joblib import Parallel, delayed
-from tqdm.contrib import tzip
 
-from src.core import Database, voxel_down_sample, VoxelGrid
+from src.core import calculate_point_cloud_coverage, Database, VoxelGrid
 from src.metrics.reduction_metric import ReductionMetric
 
 
@@ -24,26 +23,25 @@ class NotCoveredFrames(ReductionMetric):
     def evaluate(self, original_db: Database, filtered_db: Database) -> int:
         min_bounds, max_bounds = original_db.bounds
         voxel_grid = VoxelGrid(min_bounds, max_bounds, self.voxel_size)
-        filtered_db_map_len = len(
-            filtered_db.build_sparse_map_with_caching(voxel_grid).point.positions
-        )
         filtered_db_map_pcds_set = set(filtered_db.pcds)
 
         def is_not_covered(pose, pcd_raw):
             if pcd_raw in filtered_db_map_pcds_set:
                 return False
-            pcd = pcd_raw.point_cloud.transform(pose)
-            pcd = voxel_down_sample(pcd, voxel_grid)
-            united_map = filtered_db.build_sparse_map_with_caching(voxel_grid)
-            united_map += pcd
-            united_map = voxel_down_sample(united_map, voxel_grid)
-            difference = len(united_map.point.positions) - filtered_db_map_len
-            pcd_length = len(pcd.point.positions)
-            return ((pcd_length - difference) / pcd_length) < self.threshold
+            for i, filtered_db_pcd in enumerate(filtered_db.pcds):
+                pcd_query = pcd_raw.point_cloud.transform(pose)
+                pcd_db = filtered_db_pcd.point_cloud.transform(
+                    filtered_db.trajectory[i]
+                )
+
+                coverage = calculate_point_cloud_coverage(pcd_query, pcd_db, voxel_grid)
+                if coverage > self.threshold:
+                    return False
+            return True
 
         coverage_results = Parallel(n_jobs=os.cpu_count())(
             delayed(is_not_covered)(pose, pcd_raw)
-            for pose, pcd_raw in tzip(original_db.trajectory, original_db.pcds)
+            for pose, pcd_raw in zip(original_db.trajectory, original_db.pcds)
         )
         return sum(coverage_results)
 
