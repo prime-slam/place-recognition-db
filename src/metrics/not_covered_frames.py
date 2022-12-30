@@ -35,7 +35,7 @@ class NotCoveredFrames(ReductionMetric):
                 )
 
                 coverage = calculate_point_cloud_coverage(pcd_query, pcd_db, voxel_grid)
-                if coverage > self.threshold:
+                if coverage >= self.threshold:
                     return False
             return True
 
