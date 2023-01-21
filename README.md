@@ -27,7 +27,7 @@ Example dataset
 The number of images, point clouds and poses in the trajectory file must be the same.
 
 ## Example of usage
-```
+```python
 # Imports
 from src.io import Exporter, read_dataset
 from src.reduction_methods import SetCover
