@@ -1,1 +1,89 @@
-<h1>PlaceRecognitionDB</h1>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VPR-DB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 class="display-5 fw-bold">Dominating Set Database Selection for Visual Place Recognition</h1>
+        <h5><p>Anastasiia Kornilova<sup>1*</sup>, 
+            Ivan Moskalenko<sup>1,2*</sup>, 
+            Timofei Pushkin<sup>1,2</sup>, 
+            Fakhriddin Tojiboev<sup>1</sup>, 
+            Rahim Tariverdizadeh<sup>1</sup>, 
+            Gonzalo Ferrer<sup>1</sup></p></h5>
+        <p><sup>1</sup> Skolkovo Institute of Science and Technology (Skoltech), Center for AI Technology (CAIT)<br> 
+           <sup>2</sup> Software Engineering Department, Saint Petersburg State University<br>
+           <sup>*</sup> Indicates equal contribution</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a class="btn btn-outline-secondary btn-lg px-4" href="" role="button">Paper</a>
+            <a class="btn btn-outline-secondary btn-lg px-4" href="https://github.com/prime-slam/place-recognition-db" role="button">Code</a>
+        </div>
+        <br>
+        <div class="container px-5">
+            <img src="assets/pipeline.png" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Pipeline" loading="lazy">
+        </div>
+    </div> 
+
+    <div class="col-lg-6 mx-auto">
+    <h3 class="text-center">Abstract</h3>
+    <p class="lead">This paper presents an approach for creating a
+        visual place recognition (VPR) database for localization in
+        indoor environments from RGBD scanning sequences. The
+        proposed approach is formulated as a minimization problem
+        in terms of dominating set algorithm for graph, constructed
+        from spatial information, and referred as DominatingSet. Our
+        algorithm shows better scene coverage in comparison to other
+        methodologies that are used for database creation. Also, we
+        demonstrate that using DominatingSet, a database size could
+        be up to 250-1400 times smaller than the original scanning
+        sequence while maintaining a recall rate of more than 80% on
+        testing sequences. We evaluated our algorithm on 7-scenes and
+        BundleFusion datasets and an additionally recorded sequence
+        in a highly repetitive office setting. In addition, the database
+        selection can produce weakly-supervised labels for fine-tuning
+        neural place recognition algorithms to particular settings,
+        improving even more their accuracy.</p>
+    </div>
+    <br>
+
+    <div class="col-lg-6 mx-auto">
+        <h3 class="text-center">Library</h3>
+        <p class="lead">The paper also presents a fully automated pipeline for VPR
+            database creation from RGBD scanning sequences, as well as
+            a set of metrics for VPR database evaluation. The code is available on our <a href="https://github.com/prime-slam/place-recognition-db">GitHub repo</a>.</p>
+    </div>
+    <br>
+
+    <div class="col-lg-6 mx-auto">
+        <h3 class="text-center">Sk campus dataset</h3>
+        <div class="container px-5">
+            <img src="assets/sk-campus.png" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Pipeline" loading="lazy">
+        </div>
+        <p class="lead">We have recorded a set of sequences in the Skoltech
+            campus using Azure Kinect DK sensor. This environment
+            contains repeated structures with similar design of desks,
+            walls and doors and therefore provides more challenging
+            conditions for a VPR algorithm in the indoor environment. You can download this dataset <a href="">here</a>.</p>
+    </div>
+    <br>
+
+    <div class="bg-dark text-secondary px-4 py-5">
+        <div class="py-5">
+          <h1 class="display-5 fw-bold text-white text-center">Citing this work</h1>
+          <p class="fs-5 mb-4 text-center">If you find this work useful in your research, please consider citing:</p>
+          <div class="col-lg-6 fs-5 mb-4 mx-auto text-justify border border-secondary rounded">
+            <p class="px-3 py-3">@article{vprdb2023,<br> 
+                title={Dominating Set Database Selection for Visual Place Recognition},<br>
+                author={Anastasiia Kornilova, Ivan Moskalenko, Timofei Pushkin, Fakhriddin Tojiboev, Rahim Tariverdizadeh, and Gonzalo Ferrer},<br>
+                journal={arXiv preprint arXiv:2208.00277},<br>
+                year={2023}}</code>           
+          </div>
+        </div>
+      </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
