@@ -1,0 +1,6 @@
+mrob==0.0.11
+networkx==3.0
+nptyping==2.5.0
+numpy==1.24.2
+open3d==0.17.0
+opencv_python==4.7.0.72
