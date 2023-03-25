@@ -22,7 +22,7 @@ Example dataset
 |   ├── ...
 └── CameraTrajectory.txt
 ```
-The number of color images, depth images and poses 
+The number of color images, depth images (or PCDs) and poses 
 in the trajectory file must be the same.
 
 ## Usage
