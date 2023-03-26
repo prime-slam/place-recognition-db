@@ -31,7 +31,7 @@ class DominatingSet(ReductionMethod):
         # Frame size is the number of voxels it covers
         frames_sizes = []
         for i, pose in enumerate(db.trajectory):
-            pcd = db.spatial_items[i].point_cloud.transform(pose)
+            pcd = db.point_clouds[i].point_cloud.transform(pose)
             down_sampled_pcd = voxel_grid.voxel_down_sample(pcd)
             points = down_sampled_pcd.points
             frames_sizes.append(len(points))
@@ -66,8 +66,8 @@ class DominatingSet(ReductionMethod):
         result_indices = list(nx.dominating_set(G))
         result_indices.sort()
         new_rgb = [db.color_images[i] for i in result_indices]
-        new_spatial = [db.spatial_items[i] for i in result_indices]
+        new_point_clouds = [db.point_clouds[i] for i in result_indices]
         new_traj = [db.trajectory[i] for i in result_indices]
-        return Database(new_rgb, new_spatial, new_traj)
+        return Database(new_rgb, new_point_clouds, new_traj)
 
     reduce.__doc__ = ReductionMethod.reduce.__doc__

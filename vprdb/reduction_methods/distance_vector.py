@@ -22,7 +22,7 @@ class DistanceVector(ReductionMethod):
         traj = np.asarray(db.trajectory)
         new_traj = [traj[0]]
         new_color = [db.color_images[0]]
-        new_spatial = [db.spatial_items[0]]
+        new_point_clouds = [db.point_clouds[0]]
         first_points = traj[:-1, :3, 3]
         last_points = traj[1:, :3, 3]
         distances = np.linalg.norm(last_points - first_points, axis=1)
@@ -32,9 +32,9 @@ class DistanceVector(ReductionMethod):
             if partial_distance > self.distance_threshold:
                 new_traj.append(traj[i + 1])
                 new_color.append(db.color_images[i + 1])
-                new_spatial.append(db.spatial_items[i + 1])
+                new_point_clouds.append(db.point_clouds[i + 1])
                 partial_distance = 0
 
-        return Database(new_color, new_spatial, new_traj)
+        return Database(new_color, new_point_clouds, new_traj)
 
     reduce.__doc__ = ReductionMethod.reduce.__doc__

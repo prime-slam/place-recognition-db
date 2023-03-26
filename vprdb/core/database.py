@@ -11,15 +11,15 @@ from vprdb.providers import ColorImageProvider, DepthImageProvider, PointCloudPr
 @dataclass(frozen=True)
 class Database:
     color_images: list[ColorImageProvider]
-    spatial_items: list[DepthImageProvider | PointCloudProvider]
+    point_clouds: list[DepthImageProvider | PointCloudProvider]
     trajectory: list[NDArray[Shape["4, 4"], Float]]
 
     def __post_init__(self):
         if not (
-            len(self.trajectory) == len(self.spatial_items) == len(self.trajectory)
+                len(self.trajectory) == len(self.point_clouds) == len(self.trajectory)
         ):
             raise ValueError(
-                "Trajectory, RGB images and spatial items should have equal length"
+                "Trajectory, RGB images and point clouds should have equal length"
             )
 
     @classmethod
@@ -70,7 +70,7 @@ class Database:
         max_bounds = []
 
         for i in range(len(self)):
-            pcd = self.spatial_items[i].point_cloud.transform(self.trajectory[i])
+            pcd = self.point_clouds[i].point_cloud.transform(self.trajectory[i])
             min_bounds.append(pcd.get_min_bound())
             max_bounds.append(pcd.get_max_bound())
 

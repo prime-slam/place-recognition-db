@@ -21,7 +21,7 @@ def export(
     database: Database,
     path_to_export: Path,
     color_dir: str,
-    spatial_data_dir: str,
+    point_clouds_dir: str,
     trajectory_file_name: str,
 ):
     """
@@ -29,18 +29,18 @@ def export(
     :param database: Database for exporting
     :param path_to_export: Directory for exporting. Will be created if it does not exist
     :param color_dir: Directory name for saving color images
-    :param spatial_data_dir: Directory name for saving depth images / PCDs
+    :param point_clouds_dir: Directory name for saving depth images / PCDs
     :param trajectory_file_name: File name for saving the trajectory
     """
     path_to_color = path_to_export / color_dir
-    path_to_spatial = path_to_export / spatial_data_dir
+    path_to_point_clouds = path_to_export / point_clouds_dir
     path_to_color.mkdir(parents=True, exist_ok=False)
-    path_to_spatial.mkdir(exist_ok=False)
+    path_to_point_clouds.mkdir(exist_ok=False)
 
     for rgb_image in database.color_images:
         shutil.copyfile(rgb_image.path, path_to_color / rgb_image.path.name)
 
-    for spatial_item in database.spatial_items:
-        shutil.copyfile(spatial_item.path, path_to_spatial / spatial_item.path.name)
+    for point_cloud in database.point_clouds:
+        shutil.copyfile(point_cloud.path, path_to_point_clouds / point_cloud.path.name)
 
     __poses_to_txt(database.trajectory, path_to_export / trajectory_file_name)

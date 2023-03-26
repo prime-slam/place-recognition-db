@@ -55,8 +55,8 @@ class CubeDivision(ReductionMethod):
         res_indices.sort()
 
         new_rgb = [db.color_images[i] for i in res_indices]
-        new_spatial = [db.spatial_items[i] for i in res_indices]
+        new_point_clouds = [db.point_clouds[i] for i in res_indices]
         new_traj = [db.trajectory[i] for i in res_indices]
-        return Database(new_rgb, new_spatial, new_traj)
+        return Database(new_rgb, new_point_clouds, new_traj)
 
     reduce.__doc__ = ReductionMethod.reduce.__doc__
