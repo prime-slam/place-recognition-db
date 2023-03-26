@@ -9,6 +9,8 @@ To use the tool, your data must be in a specific format.
 * Depth images corresponding to color images in 16-bit grayscale format or point clouds in `.pcd` format.
 * The trajectory containing one pose in each line in `timestamp (optional) tx ty tz qx qy qz qw` format.
 
+Thus, the tool supports the [TUM](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/file_formats) format for datasets.
+
 Therefore, the structure of the dataset should look like this:
 ```
 Example dataset
