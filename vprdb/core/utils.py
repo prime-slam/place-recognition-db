@@ -20,5 +20,5 @@ def calculate_point_cloud_coverage(
     united_map = voxel_grid.voxel_down_sample(query_pcd + db_pcd)
 
     query_size = len(query_pcd.points)
-    intersection = query_size + len(db_pcd.points) - len(united_map.points)
-    return intersection / query_size
+    intersection_size = query_size + len(db_pcd.points) - len(united_map.points)
+    return intersection_size / query_size
