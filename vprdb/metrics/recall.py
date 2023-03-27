@@ -15,7 +15,9 @@ def recall(
 
     :param source_db: Database for the VPR task
     :param test_db: Database used as queries to the VPR system
-    :param matches: VPR system matches
+    :param matches: VPR system matches.
+    The i-th value from the list is the index of the frame from the database,
+    which will be matched with the i-th test frame
     :param voxel_size: Voxel size for down sampling
     :param threshold: The value of frame coverage,
     below which the frame will be considered uncovered
