@@ -1,10 +1,12 @@
 import numpy as np
+import open3d as o3d
 
 from dataclasses import dataclass
 from functools import cached_property
 from nptyping import Float, NDArray, Shape
 from pathlib import Path
 
+from vprdb.core.voxel_grid import VoxelGrid
 from vprdb.providers import ColorImageProvider, DepthImageProvider, PointCloudProvider
 
 
@@ -15,9 +17,7 @@ class Database:
     trajectory: list[NDArray[Shape["4, 4"], Float]]
 
     def __post_init__(self):
-        if not (
-                len(self.trajectory) == len(self.point_clouds) == len(self.trajectory)
-        ):
+        if not (len(self.trajectory) == len(self.point_clouds) == len(self.trajectory)):
             raise ValueError(
                 "Trajectory, RGB images and point clouds should have equal length"
             )
@@ -77,3 +77,22 @@ class Database:
         min_bound = np.amin(np.asarray(min_bounds), axis=0)
         max_bound = np.amax(np.asarray(max_bounds), axis=0)
         return min_bound, max_bound
+
+    def build_sparse_map(
+        self,
+        voxel_grid: VoxelGrid,
+        down_sample_step: int,
+    ) -> o3d.geometry.PointCloud:
+        """
+        Builds sparse map of the whole DB scene
+        :param voxel_grid: Voxel grid for down sampling
+        :param down_sample_step: Voxel down sampling step for reducing RAM usage
+        :return: Resulting point cloud of the scene
+        """
+        map_pcd = o3d.geometry.PointCloud()
+        for i, (pose, pcd_raw) in enumerate(zip(self.trajectory, self.point_clouds)):
+            pcd = pcd_raw.point_cloud.transform(pose)
+            map_pcd += pcd
+            if i % down_sample_step == 0:
+                map_pcd = voxel_grid.voxel_down_sample(map_pcd)
+        return voxel_grid.voxel_down_sample(map_pcd)
