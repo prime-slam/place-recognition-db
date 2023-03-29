@@ -12,5 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from vprdb.core.database import Database
-from vprdb.core.utils import calculate_point_cloud_coverage
+from vprdb.core.utils import (
+    calculate_iou,
+    calculate_point_cloud_coverage,
+    find_bounds_for_multiple_databases,
+    match_two_databases,
+)
 from vprdb.core.voxel_grid import VoxelGrid
