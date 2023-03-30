@@ -1,4 +1,5 @@
-#  Copyright (c) 2023, Ivan Moskalenko, Anastasiia Kornilova
+#  Copyright (c) 2023, Musavian Mirfarid, Fakhriddin Tojiboev,
+#  Ivan Moskalenko, Anastasiia Kornilova
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -11,11 +12,6 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from vprdb.core.database import Database
-from vprdb.core.utils import (
-    calculate_iou,
-    calculate_point_cloud_coverage,
-    find_bounds_for_multiple_databases,
-    match_two_databases,
-)
-from vprdb.core.voxel_grid import VoxelGrid
+from vprdb.vpr_systems.cos_place.training.data_module import DataModule
+from vprdb.vpr_systems.cos_place.training.trainer import CosPlaceTrainer
+from vprdb.vpr_systems.cos_place.training.utils import create_groups
