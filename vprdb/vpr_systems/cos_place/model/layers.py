@@ -1,5 +1,5 @@
 #  Copyright (c) 2023, Gabriele Berton, Carlo Masone, Barbara Caputo,
-#  Ivan Moskalenko, Anastasiia Kornilova
+#  Timofey Pushkin, Ivan Moskalenko, Anastasiia Kornilova
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.

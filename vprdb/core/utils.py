@@ -67,7 +67,7 @@ def match_two_databases(
     source_db: Database, target_db: Database, voxel_grid: VoxelGrid
 ) -> list[int]:
     """
-    Builds matches between two databases
+    Builds matches between two databases. Databases should have the same coordinate system
     :param source_db: The database for which matches are being built
     :param target_db: The database on the base of which the matches will be built
     :param voxel_grid: VoxelGrid for down sampling
