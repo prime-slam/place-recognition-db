@@ -11,5 +11,8 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from vprdb.vpr_systems.cos_place import CosPlace
-from vprdb.vpr_systems.netvlad import NetVLAD
+from vprdb.vpr_systems.netvlad.training.pca import pca
+from vprdb.vpr_systems.netvlad.training.t_dataset import TDataset
+from vprdb.vpr_systems.netvlad.training.tools import save_checkpoint
+from vprdb.vpr_systems.netvlad.training.train_epoch import train_epoch
+from vprdb.vpr_systems.netvlad.training.validation import validate

@@ -14,6 +14,7 @@
 import numpy as np
 import random
 import torch
+import torchvision.transforms as transforms
 
 
 def make_deterministic(seed=0):
@@ -27,3 +28,13 @@ def make_deterministic(seed=0):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+
+
+def input_transform(resize=(480, 640)):
+    transforms_list = [
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ]
+    if resize[0] > 0 and resize[1] > 0:
+        transforms_list = [transforms.Resize(resize)] + transforms_list
+    return transforms.Compose(transforms_list)

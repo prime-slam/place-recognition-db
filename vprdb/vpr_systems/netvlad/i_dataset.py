@@ -11,5 +11,23 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from vprdb.vpr_systems.cos_place import CosPlace
-from vprdb.vpr_systems.netvlad import NetVLAD
+from pathlib import Path
+from PIL import Image
+from torch.utils.data import Dataset
+
+from vprdb.vpr_systems.utils import input_transform
+
+
+class IDataset(Dataset):
+    def __init__(self, images: list[Path], resize=(480, 640)):
+        self.images = images
+        self.transform = input_transform(resize)
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, index):
+        img = Image.open(self.images[index])
+        img = self.transform(img)
+
+        return img, index

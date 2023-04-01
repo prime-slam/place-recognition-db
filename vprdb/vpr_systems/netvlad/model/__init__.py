@@ -11,5 +11,10 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from vprdb.vpr_systems.cos_place import CosPlace
-from vprdb.vpr_systems.netvlad import NetVLAD
+from vprdb.vpr_systems.netvlad.model.models_generic import (
+    Flatten,
+    get_backend,
+    get_model,
+    get_pca_encoding,
+    L2Norm,
+)
