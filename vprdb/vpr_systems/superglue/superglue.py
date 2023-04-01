@@ -20,7 +20,7 @@ import torch
 from tqdm import tqdm
 
 from vprdb.core import Database
-from vprdb.vpr_systems.superglue.models import SuperGlueMatcher, SuperPoint, read_image
+from vprdb.vpr_systems.superglue.models import read_image, SuperGlueMatcher, SuperPoint
 
 
 class SuperGlue:
