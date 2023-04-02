@@ -17,7 +17,7 @@ from tqdm import tqdm
 from typing import Optional
 
 from vprdb.core import Database
-from vprdb.vpr_systems import SuperGlue, NetVLAD, CosPlace
+from vprdb.vpr_systems import CosPlace, NetVLAD, SuperGlue
 
 
 class GlobalLocalization:
