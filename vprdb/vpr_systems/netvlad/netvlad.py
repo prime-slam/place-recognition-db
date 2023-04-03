@@ -46,10 +46,22 @@ from vprdb.vpr_systems.utils import input_transform, make_deterministic
 
 
 class NetVLAD:
-    def __init__(self, path_to_weights: str):
+    def __init__(
+        self,
+        path_to_weights: str,
+        resize: tuple[int, int] = (480, 640),
+        threads: int = 0,
+        batch_size: int = 20,
+        use_vladv2: bool = False,
+    ):
         self.cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.cuda else "cpu")
         self.encoder_dim, self.encoder = get_backend()
+
+        self.resize = resize
+        self.threads = threads
+        self.batch_size = batch_size
+        self.use_vladv2 = use_vladv2
 
         if isfile(path_to_weights):
             self.path_to_weights = path_to_weights
@@ -66,18 +78,10 @@ class NetVLAD:
     def get_database_descriptors(
         self,
         database: Database,
-        resize=(480, 640),
-        threads=0,
-        batch_size=20,
-        use_vladv2=False,
     ):
         """
         Gets database RGB images CosPlace descriptors
         :param database: Database for getting descriptors
-        :param resize: Resizing before feature extraction
-        :param threads: Number of workers
-        :param batch_size: Size of a batch
-        :param use_vladv2: If true, use vladv2 otherwise use vladv1
         :return: Descriptors for database images
         """
         num_pcs = self.checkpoint["state_dict"]["WPCA.0.bias"].shape[0]
@@ -86,7 +90,7 @@ class NetVLAD:
             self.encoder,
             self.encoder_dim,
             self.num_clusters,
-            use_vladv2,
+            self.use_vladv2,
             append_pca_layer=True,
             num_pcs=num_pcs,
         )
@@ -94,25 +98,19 @@ class NetVLAD:
         model = model.to(self.device)
 
         color_images_paths = [img.path for img in database.color_images]
-        dataset = IDataset(color_images_paths, resize)
+        dataset = IDataset(color_images_paths, self.resize)
         test_data_loader = DataLoader(
             dataset=dataset,
-            num_workers=threads,
-            batch_size=batch_size,
+            num_workers=self.threads,
+            batch_size=self.batch_size,
             shuffle=False,
             pin_memory=self.cuda,
         )
         model.eval()
         with torch.no_grad():
             db_feat = np.empty((len(dataset), num_pcs), dtype=np.float32)
-            for iteration, (input_data, indices) in enumerate(
-                tqdm(
-                    test_data_loader,
-                    position=1,
-                    leave=False,
-                    desc="Test Iter".rjust(15),
-                ),
-                1,
+            for iteration, (input_data, indices) in tqdm(
+                enumerate(test_data_loader), total=len(test_data_loader)
             ):
                 indices_np = indices.detach().numpy()
                 input_data = input_data.to(self.device)
@@ -132,7 +130,6 @@ class NetVLAD:
         voxel_size: float = 0.3,
         seed=42,
         add_pca=True,
-        use_vladv2=False,
         optim_name="SGD",
         lr=0.0001,
         momentum=0.9,
@@ -143,7 +140,6 @@ class NetVLAD:
         nNeg=5,
         cache_bs=20,
         bs=4,
-        threads=0,
         max_epochs=100,
         eval_every=1,
         patience=5,
@@ -182,7 +178,9 @@ class NetVLAD:
         del checkpoint["state_dict"]["WPCA.0.weight"]
         del checkpoint["state_dict"]["WPCA.0.bias"]
 
-        model = get_model(self.encoder, self.encoder_dim, self.num_clusters, use_vladv2)
+        model = get_model(
+            self.encoder, self.encoder_dim, self.num_clusters, self.use_vladv2
+        )
         model.load_state_dict(checkpoint["state_dict"])
 
         if optim_name == "ADAM":
@@ -217,7 +215,7 @@ class NetVLAD:
             n_neg=nNeg,
             transform=input_transform(),
             bs=cache_bs,
-            threads=threads,
+            threads=self.threads,
         )
 
         validation_dataset = TDataset(
@@ -227,7 +225,7 @@ class NetVLAD:
             n_neg=nNeg,
             transform=input_transform(),
             bs=cache_bs,
-            threads=threads,
+            threads=self.threads,
         )
 
         print("===> Training query set:", len(train_dataset.q_idx))
@@ -256,7 +254,7 @@ class NetVLAD:
                 writer,
                 bs,
                 self.num_clusters,
-                threads,
+                self.threads,
             )
             if scheduler is not None:
                 scheduler.step(epoch)
@@ -267,7 +265,7 @@ class NetVLAD:
                     self.encoder_dim,
                     self.device,
                     writer,
-                    threads,
+                    self.threads,
                     cache_bs,
                     self.num_clusters,
                     epoch,
@@ -331,7 +329,7 @@ class NetVLAD:
 
             data_loader = DataLoader(
                 dataset=IDataset(db_paths),
-                num_workers=threads,
+                num_workers=self.threads,
                 batch_size=cache_bs,
                 shuffle=False,
                 pin_memory=self.cuda,
@@ -347,7 +345,9 @@ class NetVLAD:
                 db_feat = np.empty((len(data_loader.sampler), pool_size))
                 print("Compute", len(db_feat), "features")
 
-                for iteration, (input_data, indices) in enumerate(tqdm(data_loader)):
+                for iteration, (input_data, indices) in tqdm(
+                    enumerate(data_loader), total=len(data_loader)
+                ):
                     input_data = input_data.to(self.device)
                     image_encoding = model.encoder(input_data)
                     vlad_encoding = model.pool(image_encoding)
