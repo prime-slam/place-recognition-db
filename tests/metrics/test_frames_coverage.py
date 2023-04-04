@@ -15,13 +15,16 @@ import numpy as np
 import pytest
 
 from tests.test_data import real_db
-from tests.utils import filter_db, generate_random_samples_of_test_db
+from tests.utils import generate_random_samples_of_test_db, get_db_subset
 from vprdb.metrics import frames_coverage
 
 
-@pytest.mark.parametrize("indices", generate_random_samples_of_test_db())
-def test_frames_coverage(indices):
-    """The metric should return 1 for those frames that are left in the database"""
-    new_db = filter_db(real_db, indices)
+@pytest.mark.parametrize("indices", generate_random_samples_of_test_db(10))
+def test_frames_coverage_db_subset(indices):
+    """
+    The metric should return 1 for those frames that are both
+    in the source database and in its subset
+    """
+    new_db = get_db_subset(real_db, indices)
     metric_result = frames_coverage(real_db, new_db)
     assert (np.asarray(metric_result)[indices] == 1).all()

@@ -30,13 +30,16 @@ def generate_trajectory_from_positions(
     return poses
 
 
-def filter_db(database: Database, indices: list[int]) -> Database:
+def get_db_subset(database: Database, indices: list[int]) -> Database:
     new_rgb = [database.color_images[i] for i in indices]
     new_point_clouds = [database.point_clouds[i] for i in indices]
     new_traj = [database.trajectory[i] for i in indices]
     return Database(new_rgb, new_point_clouds, new_traj)
 
 
-def generate_random_samples_of_test_db():
-    """Generates 10 random-sized samples from database"""
-    return [sorted(random.sample(range(5), k=random.randint(1, 5))) for _ in range(10)]
+def generate_random_samples_of_test_db(number_of_samples: int):
+    """Generates random-sized samples from database"""
+    return [
+        sorted(random.sample(range(5), k=random.randint(1, 5)))
+        for _ in range(number_of_samples)
+    ]

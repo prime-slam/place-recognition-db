@@ -14,18 +14,18 @@
 import pytest
 
 from tests.test_data import real_db
-from tests.utils import filter_db, generate_random_samples_of_test_db
+from tests.utils import generate_random_samples_of_test_db, get_db_subset
 from vprdb.core import match_two_databases, VoxelGrid
 from vprdb.metrics import recall
 
 
-@pytest.mark.parametrize("indices", generate_random_samples_of_test_db())
-def test_recall(indices):
+@pytest.mark.parametrize("indices", generate_random_samples_of_test_db(10))
+def test_recall_db_subset(indices):
     """
     Because the new database is being tested on the same database as it was generated,
     all frames in it can be correctly mapped
     """
-    new_db = filter_db(real_db, indices)
+    new_db = get_db_subset(real_db, indices)
     min_bounds, max_bounds = real_db.bounds
     voxel_grid = VoxelGrid(min_bounds, max_bounds, 0.3)
     matches = match_two_databases(real_db, new_db, voxel_grid)
