@@ -86,7 +86,9 @@ def sample_descriptors(keypoints, descriptors, s: int = 8):
     """Interpolate descriptors at keypoint locations"""
     b, c, h, w = descriptors.shape
     keypoints = keypoints - s / 2 + 0.5
-    keypoints /= torch.tensor([(w * s - s / 2 - 0.5), (h * s - s / 2 - 0.5)],).to(
+    keypoints /= torch.tensor(
+        [(w * s - s / 2 - 0.5), (h * s - s / 2 - 0.5)],
+    ).to(
         keypoints
     )[None]
     keypoints = keypoints * 2 - 1  # normalize to (-1, 1)
