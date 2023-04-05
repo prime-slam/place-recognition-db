@@ -19,8 +19,11 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class PointCloudProvider:
+    """ Point provider is a wrapper for point clouds """
     path: Path
+    """ Path to file on hard drive """
 
     @property
     def point_cloud(self) -> o3d.geometry.PointCloud:
+        """ Returns Open3D point cloud """
         return o3d.io.read_point_cloud(str(self.path))

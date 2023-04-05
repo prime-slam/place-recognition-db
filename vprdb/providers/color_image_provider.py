@@ -20,8 +20,11 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class ColorImageProvider:
+    """ Color image provider is a wrapper for color images """
     path: Path
+    """ Path to file on hard drive"""
 
     @property
     def color_image(self) -> NDArray[Shape["*, *, 3"], UInt8]:
+        """ Returns image in OpenCV format"""
         return cv2.imread(str(self.path), cv2.IMREAD_COLOR)
