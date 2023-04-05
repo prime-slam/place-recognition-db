@@ -46,6 +46,10 @@ from vprdb.vpr_systems.utils import input_transform, make_deterministic
 
 
 class NetVLAD:
+    """
+    Realisation of [NetVLAD](https://github.com/QVPR/Patch-NetVLAD) global localization method.
+    """
+
     def __init__(
         self,
         path_to_weights: str,
