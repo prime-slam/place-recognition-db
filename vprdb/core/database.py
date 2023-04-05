@@ -25,6 +25,11 @@ from vprdb.providers import ColorImageProvider, DepthImageProvider, PointCloudPr
 
 @dataclass(frozen=True)
 class Database:
+    """
+    Class for easy storage and processing of color images, depth images
+    and trajectory and their further use for the VPR task
+    """
+
     color_images: list[ColorImageProvider]
     point_clouds: list[DepthImageProvider | PointCloudProvider]
     trajectory: list[NDArray[Shape["4, 4"], Float]]
@@ -44,6 +49,15 @@ class Database:
         intrinsics: NDArray[Shape["3, 3"], Float],
         trajectory: list[NDArray[Shape["4, 4"], Float]],
     ):
+        """
+        The method allows to construct the Database from depth images
+        :param color_images_paths: List of paths to color images
+        :param depth_images_paths: List of paths to depth images
+        :param depth_scale: Depth scale for transforming depth image into point clouds
+        :param intrinsics: Intrinsic camera parameters
+        :param trajectory: List of camera poses
+        :return: Constructed database
+        """
         color_images_providers = [
             ColorImageProvider(path_to_image) for path_to_image in color_images_paths
         ]
@@ -60,6 +74,13 @@ class Database:
         point_clouds_paths: list[Path],
         trajectory: list[NDArray[Shape["4, 4"], Float]],
     ):
+        """
+        The method allows to construct the Database from point clouds
+        :param color_images_paths: List of paths to color images
+        :param point_clouds_paths: List of paths to point clouds
+        :param trajectory: List of camera poses
+        :return: Constructed database
+        """
         color_images_providers = [
             ColorImageProvider(path_to_image) for path_to_image in color_images_paths
         ]
