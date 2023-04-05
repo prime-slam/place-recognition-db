@@ -26,6 +26,7 @@ class GlobalLocalization:
     and one of the methods of global localization.
     Results can be improved with SuperGlue.
     """
+
     def __init__(
         self,
         global_extractor: CosPlace | NetVLAD,
