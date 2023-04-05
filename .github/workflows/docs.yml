@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      - run: pip install pdocs
+      - run: pip install pdoc
       - run: pdoc ./vprdb -o ./docs
 
       - name: Deploy
