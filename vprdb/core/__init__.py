@@ -11,6 +11,12 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+"""
+`core` submodule contains a Database class for easy storage and processing of
+color images, depth images and trajectory and their further use for the VPR task.
+
+`VoxelGrid` and `utils` provide various operations on point clouds.
+"""
 from vprdb.core.database import Database
 from vprdb.core.utils import (
     calculate_iou,

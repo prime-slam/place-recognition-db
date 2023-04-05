@@ -15,3 +15,5 @@ from vprdb.reduction_methods.cube_division import CubeDivision
 from vprdb.reduction_methods.distance_vector import DistanceVector
 from vprdb.reduction_methods.dominating_set import DominatingSet
 from vprdb.reduction_methods.every_nth import EveryNth
+
+__all__ = ["CubeDivision", "DistanceVector", "DominatingSet", "EveryNth"]

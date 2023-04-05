@@ -12,3 +12,5 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from vprdb.vpr_systems.superglue.superglue import SuperGlue
+
+__all__ = ["SuperGlue"]
