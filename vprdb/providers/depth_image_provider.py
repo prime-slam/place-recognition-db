@@ -24,7 +24,7 @@ class DepthImageProvider:
     """Depth image provider is a wrapper for depth images"""
 
     path: Path
-    """ Path to the file on the hard drive """
+    """Path to the file on the hard drive"""
     intrinsics: NDArray[Shape["3, 3"], Float]
     """Intrinsic camera parameters"""
     depth_scale: int
