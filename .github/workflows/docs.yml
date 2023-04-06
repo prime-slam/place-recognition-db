@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - docs
+      - master
 
 jobs:
   # Build the documentation and upload the static HTML files as an artifact.
