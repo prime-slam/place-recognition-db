@@ -1,34 +1,34 @@
 # PlaceRecognitionDB
-PlaceRecognitionDB is a tool for creating optimally sized databases (containing the minimum number of frames covering the scene) for place recognition task from RGBD and LiDAR data.
+[![Lint&Tests](https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml/badge.svg)](https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml)
+[![Docs](https://github.com/prime-slam/place-recognition-db/actions/workflows/docs.yml/badge.svg)](https://prime-slam.github.io/place-recognition-db/docs/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-The tool supports several basic methods for creating databases, as well as the DominatingSet method for creating optimal databases.
+PlaceRecognitionDB is a tool for creating optimally sized databases 
+(containing the minimum number of frames covering the scene) for place recognition task from RGBD and LiDAR data.
+
+The tool supports several basic methods for creating databases, 
+as well as the DominatingSet method for creating optimal databases.
+A detailed description of all methods for creating databases can be found in our [paper](https://arxiv.org/abs/2303.05123).
+
+The tool also contains a global localization pipeline with [CosPlace](https://github.com/gmberton/CosPlace) 
+and [NetVLAD](https://github.com/QVPR/Patch-NetVLAD). 
+The models of these neural networks can be fine-tuned for a particular previously created database. 
+The results of global localization can also be improved with [SuperGlue](https://github.com/magicleap/SuperGluePretrainedNetwork).
+More details about the available configurations for global localization and the results 
+are available in the [paper](https://arxiv.org/abs/2303.05123).
+
+We have also developed a set of metrics that can be used to evaluate 
+the quality of created databases and the accuracy of VPR systems.
+
+For more, please visit the [PlaceRecognitionDB documentation](https://prime-slam.github.io/place-recognition-db/docs/).
+You can also find full information about our research on the [website](https://prime-slam.github.io/place-recognition-db/).
 
 ## Datasets format
-To use the tool, your data must be in a specific format
-* Color images in any format
-* Depth images in 16-bit grayscale format or point clouds in `.pcd` format. The depth images must match the color images 
-pixel by pixel (and therefore have the same resolution). You should also know the intrinsic parameters of the camera and the depth scale if you use depth images
-* The trajectory containing one pose in each line in `timestamp tx ty tz qx qy qz qw` format. Timestamp is an optional argument that is not used in the library
-
-Thus, the tool supports the [TUM](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/file_formats) format for datasets.
-
-The correspondence between poses, depth images, and color images is determined based on the order of lines in the trajectory file and the alphabetical order of the files.
-
-Therefore, the structure of the dataset should look like this:
-```
-Example dataset
-├── color
-|   ├── 001.png
-|   ├── 002.png
-|   ├── ...
-├── depth
-|   ├── 001.pcd or 001.png
-|   ├── 002.pcd or 002.png
-|   ├── ...
-└── CameraTrajectory.txt
-```
-The number of color images, depth images (or PCDs) and poses 
-in the trajectory file must be the same. The names of folders and the trajectory file are configurable.
+You can find detailed information about the data format used in the tool [here](https://prime-slam.github.io/place-recognition-db/docs/vprdb/io.html#datasets-format).
 
 ## Usage
-Please, check `example.ipynb` with usage example.
+Please check `example.ipynb` with a small example on creating a database.
+
+## License
+This project is licensed under the Apache License — 
+see the [LICENSE](https://github.com/prime-slam/place-recognition-db/blob/master/LICENSE) file for details.

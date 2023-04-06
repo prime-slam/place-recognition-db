@@ -11,4 +11,9 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+"""
+Pipeline for global localization allows to build matches between database and queries using different VPR systems.
+"""
 from vprdb.global_localization.global_localization import GlobalLocalization
+
+__all__ = ["GlobalLocalization"]

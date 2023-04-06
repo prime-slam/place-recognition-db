@@ -11,6 +11,9 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+""" The `vpr_systems` contains a set of tools for the VPR task. """
 from vprdb.vpr_systems.cos_place import CosPlace
 from vprdb.vpr_systems.netvlad import NetVLAD
 from vprdb.vpr_systems.superglue import SuperGlue
+
+__all__ = ["CosPlace", "NetVLAD", "SuperGlue"]

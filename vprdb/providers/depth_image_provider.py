@@ -21,12 +21,18 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class DepthImageProvider:
+    """Depth image provider is a wrapper for depth images"""
+
     path: Path
+    """Path to the file on the hard drive"""
     intrinsics: NDArray[Shape["3, 3"], Float]
+    """Intrinsic camera parameters"""
     depth_scale: int
+    """Depth scale for transforming depth"""
 
     @property
     def point_cloud(self) -> o3d.geometry.PointCloud:
+        """Returns Open3D point cloud constructed from depth image"""
         depth_image = cv2.imread(str(self.path), cv2.IMREAD_ANYDEPTH)
         height, width = depth_image.shape
         depth_image = o3d.geometry.Image(depth_image)

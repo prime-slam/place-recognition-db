@@ -12,3 +12,5 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from vprdb.vpr_systems.netvlad.netvlad import NetVLAD
+
+__all__ = ["NetVLAD"]

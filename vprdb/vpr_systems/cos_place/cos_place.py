@@ -36,6 +36,10 @@ from vprdb.vpr_systems.utils import make_deterministic
 
 
 class CosPlace:
+    """
+    Implementation of [CosPlace](https://github.com/gmberton/CosPlace) global localization method.
+    """
+
     def __init__(self, backbone: str, fc_output_dim: int, path_to_weights: str):
         self.backbone = backbone
         self.fc_output_dim = fc_output_dim

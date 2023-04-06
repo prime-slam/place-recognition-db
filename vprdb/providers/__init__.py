@@ -11,6 +11,9 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+"""
+Providers are designed as wrappers over various types of heavy data, to load them into RAM only when needed.
+"""
 from vprdb.providers.color_image_provider import ColorImageProvider
 from vprdb.providers.depth_image_provider import DepthImageProvider
 from vprdb.providers.point_cloud_provider import PointCloudProvider
