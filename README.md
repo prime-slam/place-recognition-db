@@ -1,5 +1,6 @@
 # PlaceRecognitionDB
 [![Lint&Tests](https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml/badge.svg)](https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml)
+[![Docs](https://github.com/prime-slam/place-recognition-db/actions/workflows/docs.yml/badge.svg)](https://prime-slam.github.io/place-recognition-db/docs/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 PlaceRecognitionDB is a tool for creating optimally sized databases 
@@ -7,11 +8,14 @@ PlaceRecognitionDB is a tool for creating optimally sized databases
 
 The tool supports several basic methods for creating databases, 
 as well as the DominatingSet method for creating optimal databases.
+A detailed description of all methods for creating databases can be found in our [paper](https://arxiv.org/abs/2303.05123).
 
-The tool also contains a global Localization pipeline with [CosPlace](https://github.com/gmberton/CosPlace) 
+The tool also contains a global localization pipeline with [CosPlace](https://github.com/gmberton/CosPlace) 
 and [NetVLAD](https://github.com/QVPR/Patch-NetVLAD). 
 The models of these neural networks can be fine-tuned for a particular previously created database. 
 The results of global localization can also be improved with [SuperGlue](https://github.com/magicleap/SuperGluePretrainedNetwork).
+More details about the available configurations for global localization and the results 
+are available in the [paper](https://arxiv.org/abs/2303.05123).
 
 We have also developed a set of metrics that can be used to evaluate 
 the quality of created databases and the accuracy of VPR systems.
