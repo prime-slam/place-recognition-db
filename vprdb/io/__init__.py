@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 """
-The `io` submodule allows you to read datasets from the hard disk and export them.
+The `io` submodule allows to read datasets from the hard disk and export them.
 ## Datasets format
 To use the tool, your data must be in a specific format
 * Color images in any format

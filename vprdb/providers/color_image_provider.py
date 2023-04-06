@@ -23,7 +23,7 @@ class ColorImageProvider:
     """Color image provider is a wrapper for color images"""
 
     path: Path
-    """ Path to file on hard drive"""
+    """Path to the file on the hard drive"""
 
     @property
     def color_image(self) -> NDArray[Shape["*, *, 3"], UInt8]:

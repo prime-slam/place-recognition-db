@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 """
-Metrics allow you to evaluate the quality of created databases,
+Metrics allow to evaluate the quality of created databases,
 as well as to estimate the accuracy of various VPR systems.
 """
 from vprdb.metrics.frames_coverage_ import frames_coverage

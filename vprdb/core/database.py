@@ -50,7 +50,7 @@ class Database:
         trajectory: list[NDArray[Shape["4, 4"], Float]],
     ):
         """
-        The method allows to construct the Database from depth images
+        The method allows to construct the Database from scanning sequence
         :param color_images_paths: List of paths to color images
         :param depth_images_paths: List of paths to depth images
         :param depth_scale: Depth scale for transforming depth image into point clouds
@@ -75,7 +75,7 @@ class Database:
         trajectory: list[NDArray[Shape["4, 4"], Float]],
     ):
         """
-        The method allows to construct the Database from point clouds
+        The method allows to construct the Database from point clouds, color images and trajectory
         :param color_images_paths: List of paths to color images
         :param point_clouds_paths: List of paths to point clouds
         :param trajectory: List of camera poses

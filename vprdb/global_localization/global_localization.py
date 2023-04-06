@@ -22,7 +22,7 @@ from vprdb.vpr_systems import CosPlace, NetVLAD, SuperGlue
 
 class GlobalLocalization:
     """
-    Allows you to create a predictor based on a given database
+    Allows to create a predictor based on a given database
     and one of the methods of global localization.
     Results can be improved with SuperGlue.
     """

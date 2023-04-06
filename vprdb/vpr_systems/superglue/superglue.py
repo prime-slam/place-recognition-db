@@ -54,7 +54,7 @@ from vprdb.vpr_systems.superglue.models import read_image, SuperGlueMatcher, Sup
 
 class SuperGlue:
     """
-    Realisation of [SuperGlue](https://github.com/magicleap/SuperGluePretrainedNetwork)
+    Implementation of [SuperGlue](https://github.com/magicleap/SuperGluePretrainedNetwork)
     matcher with SuperPoint extractor.
     """
 

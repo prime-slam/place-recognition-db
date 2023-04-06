@@ -19,10 +19,10 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class PointCloudProvider:
-    """Point provider is a wrapper for point clouds"""
+    """PointCloudProvider provider is a wrapper for point clouds"""
 
     path: Path
-    """ Path to file on hard drive """
+    """Path to the file on the hard drive"""
 
     @property
     def point_cloud(self) -> o3d.geometry.PointCloud:
