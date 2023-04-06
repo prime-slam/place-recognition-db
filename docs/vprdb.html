@@ -27,6 +27,7 @@
   <ul>
     <li><a href="#datasets-format">Datasets format</a></li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#license">License</a></li>
   </ul></li>
 </ul>
 
@@ -58,45 +59,38 @@ vprdb    </h1>
 
                         <div class="docstring"><h1 id="placerecognitiondb">PlaceRecognitionDB</h1>
 
-<p>PlaceRecognitionDB is a tool for creating optimally sized databases (containing the minimum number of frames covering the scene) for place recognition task from RGBD and LiDAR data.</p>
+<p><a href="https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml"><img src="https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml/badge.svg" alt="Lint&amp;Tests" /></a>
+<a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black" /></a></p>
 
-<p>The tool supports several basic methods for creating databases, as well as the DominatingSet method for creating optimal databases.</p>
+<p>PlaceRecognitionDB is a tool for creating optimally sized databases 
+(containing the minimum number of frames covering the scene) for place recognition task from RGBD and LiDAR data.</p>
+
+<p>The tool supports several basic methods for creating databases, 
+as well as the DominatingSet method for creating optimal databases.</p>
+
+<p>The tool also contains a global Localization pipeline with <a href="https://github.com/gmberton/CosPlace">CosPlace</a> 
+and <a href="https://github.com/QVPR/Patch-NetVLAD">NetVLAD</a>. 
+The models of these neural networks can be fine-tuned for a particular previously created database. 
+The results of global localization can also be improved with <a href="https://github.com/magicleap/SuperGluePretrainedNetwork">SuperGlue</a>.</p>
+
+<p>We have also developed a set of metrics that can be used to evaluate 
+the quality of created databases and the accuracy of VPR systems.</p>
+
+<p>For more, please visit the <a href="https://prime-slam.github.io/place-recognition-db/docs/">PlaceRecognitionDB documentation</a>.
+You can also find full information about our research on the <a href="https://prime-slam.github.io/place-recognition-db/">website</a>.</p>
 
 <h2 id="datasets-format">Datasets format</h2>
 
-<p>To use the tool, your data must be in a specific format</p>
-
-<ul>
-<li>Color images in any format</li>
-<li>Depth images in 16-bit grayscale format or point clouds in <code>.pcd</code> format. The depth images must match the color images 
-pixel by pixel (and therefore have the same resolution). You should also know the intrinsic parameters of the camera and the depth scale if you use depth images</li>
-<li>The trajectory containing one pose in each line in <code>timestamp tx ty tz qx qy qz qw</code> format. Timestamp is an optional argument that is not used in the library</li>
-</ul>
-
-<p>Thus, the tool supports the <a href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset/file_formats">TUM</a> format for datasets.</p>
-
-<p>The correspondence between poses, depth images, and color images is determined based on the order of lines in the trajectory file and the alphabetical order of the files.</p>
-
-<p>Therefore, the structure of the dataset should look like this:</p>
-
-<pre><code>Example dataset
-├── color
-|   ├── 001.png
-|   ├── 002.png
-|   ├── ...
-├── depth
-|   ├── 001.pcd or 001.png
-|   ├── 002.pcd or 002.png
-|   ├── ...
-└── CameraTrajectory.txt
-</code></pre>
-
-<p>The number of color images, depth images (or PCDs) and poses 
-in the trajectory file must be the same. The names of folders and the trajectory file are configurable.</p>
+<p>You can find detailed information about the data format used in the tool <a href="https://prime-slam.github.io/place-recognition-db/docs/vprdb/io.html#datasets-format">here</a>.</p>
 
 <h2 id="usage">Usage</h2>
 
-<p>Please, check <code>example.ipynb</code> with usage example.</p>
+<p>Please check <code>example.ipynb</code> with a small example on creating a database.</p>
+
+<h2 id="license">License</h2>
+
+<p>This project is licensed under the Apache License — 
+see the <a href="https://github.com/prime-slam/place-recognition-db/blob/master/LICENSE">LICENSE</a> file for details.</p>
 </div>
 
                         <input id="mod-vprdb-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
