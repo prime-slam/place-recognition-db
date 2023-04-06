@@ -87,10 +87,10 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="k">class</span> <span class="nc">PointCloudProvider</span><span class="p">:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Point provider is a wrapper for point clouds&quot;&quot;&quot;</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;PointCloudProvider provider is a wrapper for point clouds&quot;&quot;&quot;</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Path to file on hard drive &quot;&quot;&quot;</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Path to the file on the hard drive&quot;&quot;&quot;</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="nd">@property</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="k">def</span> <span class="nf">point_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">:</span>
@@ -114,10 +114,10 @@
     <a class="headerlink" href="#PointCloudProvider"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="PointCloudProvider-21"><a href="#PointCloudProvider-21"><span class="linenos">21</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="PointCloudProvider-22"><a href="#PointCloudProvider-22"><span class="linenos">22</span></a><span class="k">class</span> <span class="nc">PointCloudProvider</span><span class="p">:</span>
-</span><span id="PointCloudProvider-23"><a href="#PointCloudProvider-23"><span class="linenos">23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Point provider is a wrapper for point clouds&quot;&quot;&quot;</span>
+</span><span id="PointCloudProvider-23"><a href="#PointCloudProvider-23"><span class="linenos">23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;PointCloudProvider provider is a wrapper for point clouds&quot;&quot;&quot;</span>
 </span><span id="PointCloudProvider-24"><a href="#PointCloudProvider-24"><span class="linenos">24</span></a>
 </span><span id="PointCloudProvider-25"><a href="#PointCloudProvider-25"><span class="linenos">25</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span>
-</span><span id="PointCloudProvider-26"><a href="#PointCloudProvider-26"><span class="linenos">26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Path to file on hard drive &quot;&quot;&quot;</span>
+</span><span id="PointCloudProvider-26"><a href="#PointCloudProvider-26"><span class="linenos">26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Path to the file on the hard drive&quot;&quot;&quot;</span>
 </span><span id="PointCloudProvider-27"><a href="#PointCloudProvider-27"><span class="linenos">27</span></a>
 </span><span id="PointCloudProvider-28"><a href="#PointCloudProvider-28"><span class="linenos">28</span></a>    <span class="nd">@property</span>
 </span><span id="PointCloudProvider-29"><a href="#PointCloudProvider-29"><span class="linenos">29</span></a>    <span class="k">def</span> <span class="nf">point_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">:</span>
@@ -126,7 +126,7 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>Point provider is a wrapper for point clouds</p>
+            <div class="docstring"><p>PointCloudProvider provider is a wrapper for point clouds</p>
 </div>
 
 
@@ -150,7 +150,7 @@
     </div>
     <a class="headerlink" href="#PointCloudProvider.path"></a>
     
-            <div class="docstring"><p>Path to file on hard drive</p>
+            <div class="docstring"><p>Path to the file on the hard drive</p>
 </div>
 
 

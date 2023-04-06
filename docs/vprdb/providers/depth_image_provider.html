@@ -98,15 +98,15 @@
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Depth image provider is a wrapper for depth images&quot;&quot;&quot;</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Path to file on hard drive &quot;&quot;&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Path to the file on the hard drive &quot;&quot;&quot;</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">intrinsics</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">Shape</span><span class="p">[</span><span class="s2">&quot;3, 3&quot;</span><span class="p">],</span> <span class="n">Float</span><span class="p">]</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Intrinsic camera parameters &quot;&quot;&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Intrinsic camera parameters&quot;&quot;&quot;</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Depth scale for transforming depth &quot;&quot;&quot;</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Depth scale for transforming depth&quot;&quot;&quot;</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="nd">@property</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="k">def</span> <span class="nf">point_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">:</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns Open3D point cloud&quot;&quot;&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns Open3D point cloud constructed from depth image&quot;&quot;&quot;</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="n">depth_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_ANYDEPTH</span><span class="p">)</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>        <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">depth_image</span><span class="o">.</span><span class="n">shape</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="n">depth_image</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">depth_image</span><span class="p">)</span>
@@ -139,15 +139,15 @@
 </span><span id="DepthImageProvider-25"><a href="#DepthImageProvider-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Depth image provider is a wrapper for depth images&quot;&quot;&quot;</span>
 </span><span id="DepthImageProvider-26"><a href="#DepthImageProvider-26"><span class="linenos">26</span></a>
 </span><span id="DepthImageProvider-27"><a href="#DepthImageProvider-27"><span class="linenos">27</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span>
-</span><span id="DepthImageProvider-28"><a href="#DepthImageProvider-28"><span class="linenos">28</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Path to file on hard drive &quot;&quot;&quot;</span>
+</span><span id="DepthImageProvider-28"><a href="#DepthImageProvider-28"><span class="linenos">28</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Path to the file on the hard drive &quot;&quot;&quot;</span>
 </span><span id="DepthImageProvider-29"><a href="#DepthImageProvider-29"><span class="linenos">29</span></a>    <span class="n">intrinsics</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">Shape</span><span class="p">[</span><span class="s2">&quot;3, 3&quot;</span><span class="p">],</span> <span class="n">Float</span><span class="p">]</span>
-</span><span id="DepthImageProvider-30"><a href="#DepthImageProvider-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Intrinsic camera parameters &quot;&quot;&quot;</span>
+</span><span id="DepthImageProvider-30"><a href="#DepthImageProvider-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Intrinsic camera parameters&quot;&quot;&quot;</span>
 </span><span id="DepthImageProvider-31"><a href="#DepthImageProvider-31"><span class="linenos">31</span></a>    <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="DepthImageProvider-32"><a href="#DepthImageProvider-32"><span class="linenos">32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Depth scale for transforming depth &quot;&quot;&quot;</span>
+</span><span id="DepthImageProvider-32"><a href="#DepthImageProvider-32"><span class="linenos">32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Depth scale for transforming depth&quot;&quot;&quot;</span>
 </span><span id="DepthImageProvider-33"><a href="#DepthImageProvider-33"><span class="linenos">33</span></a>
 </span><span id="DepthImageProvider-34"><a href="#DepthImageProvider-34"><span class="linenos">34</span></a>    <span class="nd">@property</span>
 </span><span id="DepthImageProvider-35"><a href="#DepthImageProvider-35"><span class="linenos">35</span></a>    <span class="k">def</span> <span class="nf">point_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">:</span>
-</span><span id="DepthImageProvider-36"><a href="#DepthImageProvider-36"><span class="linenos">36</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns Open3D point cloud&quot;&quot;&quot;</span>
+</span><span id="DepthImageProvider-36"><a href="#DepthImageProvider-36"><span class="linenos">36</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns Open3D point cloud constructed from depth image&quot;&quot;&quot;</span>
 </span><span id="DepthImageProvider-37"><a href="#DepthImageProvider-37"><span class="linenos">37</span></a>        <span class="n">depth_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_ANYDEPTH</span><span class="p">)</span>
 </span><span id="DepthImageProvider-38"><a href="#DepthImageProvider-38"><span class="linenos">38</span></a>        <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">depth_image</span><span class="o">.</span><span class="n">shape</span>
 </span><span id="DepthImageProvider-39"><a href="#DepthImageProvider-39"><span class="linenos">39</span></a>        <span class="n">depth_image</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">depth_image</span><span class="p">)</span>
@@ -186,7 +186,7 @@
     </div>
     <a class="headerlink" href="#DepthImageProvider.path"></a>
     
-            <div class="docstring"><p>Path to file on hard drive</p>
+            <div class="docstring"><p>Path to the file on the hard drive</p>
 </div>
 
 
@@ -225,7 +225,7 @@
     </div>
     <a class="headerlink" href="#DepthImageProvider.point_cloud"></a>
     
-            <div class="docstring"><p>Returns Open3D point cloud</p>
+            <div class="docstring"><p>Returns Open3D point cloud constructed from depth image</p>
 </div>
 
 

@@ -60,18 +60,22 @@ vprdb    </h1>
                         <div class="docstring"><h1 id="placerecognitiondb">PlaceRecognitionDB</h1>
 
 <p><a href="https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml"><img src="https://github.com/prime-slam/place-recognition-db/actions/workflows/ci.yml/badge.svg" alt="Lint&amp;Tests" /></a>
+<a href="https://prime-slam.github.io/place-recognition-db/docs/"><img src="https://github.com/prime-slam/place-recognition-db/actions/workflows/docs.yml/badge.svg" alt="Docs" /></a>
 <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black" /></a></p>
 
 <p>PlaceRecognitionDB is a tool for creating optimally sized databases 
 (containing the minimum number of frames covering the scene) for place recognition task from RGBD and LiDAR data.</p>
 
 <p>The tool supports several basic methods for creating databases, 
-as well as the DominatingSet method for creating optimal databases.</p>
+as well as the DominatingSet method for creating optimal databases.
+A detailed description of all methods for creating databases can be found in our <a href="https://arxiv.org/abs/2303.05123">paper</a>.</p>
 
-<p>The tool also contains a global Localization pipeline with <a href="https://github.com/gmberton/CosPlace">CosPlace</a> 
+<p>The tool also contains a global localization pipeline with <a href="https://github.com/gmberton/CosPlace">CosPlace</a> 
 and <a href="https://github.com/QVPR/Patch-NetVLAD">NetVLAD</a>. 
 The models of these neural networks can be fine-tuned for a particular previously created database. 
-The results of global localization can also be improved with <a href="https://github.com/magicleap/SuperGluePretrainedNetwork">SuperGlue</a>.</p>
+The results of global localization can also be improved with <a href="https://github.com/magicleap/SuperGluePretrainedNetwork">SuperGlue</a>.
+More details about the available configurations for global localization and the results 
+are available in the <a href="https://arxiv.org/abs/2303.05123">paper</a>.</p>
 
 <p>We have also developed a set of metrics that can be used to evaluate 
 the quality of created databases and the accuracy of VPR systems.</p>
