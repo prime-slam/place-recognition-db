@@ -15,3 +15,4 @@ tensorboardX==2.6
 torch==2.0.0
 torchvision==0.15.1
 tqdm==4.65.0
+pykitti==0.3.1
