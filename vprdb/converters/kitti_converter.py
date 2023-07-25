@@ -3,13 +3,14 @@ import pykitti
 import numpy as np
 import mrob
 
-def kitti_to_lib_format(
-        source_dir: str,
-        sequence: str,
-        camera: int,
-        output_pcd_dir: str,
-        output_poses_dir: str):
 
+def kitti_to_lib_format(
+    source_dir: str,
+    sequence: str,
+    camera: int,
+    output_pcd_dir: str,
+    output_poses_dir: str,
+):
     if camera != 2 and camera != 3:
         raise ValueError("Invalid camera choice. Acceptable values are '2' or '3'.")
 
@@ -25,7 +26,7 @@ def kitti_to_lib_format(
     poses = dataset.poses
     poses_to_write = []
 
-    with open(output_poses_dir + "/" + 'poses.txt', "w") as file:
+    with open(output_poses_dir + "/" + "poses.txt", "w") as file:
         for i in range(len(dataset)):
             pcd = dataset.get_velo(i)
             pcd_obj = o3d.geometry.PointCloud()
@@ -40,14 +41,13 @@ def kitti_to_lib_format(
                 image = dataset.get_cam3(i)
 
             width, height = image.size
-            depth_reproj = transformed_pcd.project_to_depth_image(width,
-                                                                  height,
-                                                                  cam_intrinsics,
-                                                                  depth_max=5000.0)
+            depth_reproj = transformed_pcd.project_to_depth_image(
+                width, height, cam_intrinsics, depth_max=5000.0
+            )
 
-            pcd_from_depth = o3d.t.geometry.PointCloud.create_from_depth_image(depth_reproj,
-                                                                               cam_intrinsics,
-                                                                               depth_max=10000.0)
+            pcd_from_depth = o3d.t.geometry.PointCloud.create_from_depth_image(
+                depth_reproj, cam_intrinsics, depth_max=10000.0
+            )
             converted_pcd = o3d.t.geometry.PointCloud.to_legacy(pcd_from_depth)
 
             pcd_filename = "{:06d}.pcd".format(i)
