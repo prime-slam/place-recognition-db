@@ -8,24 +8,24 @@ import shutil
 from pathlib import Path
 
 
-def copy_img_folder(src_folder, out_folder, shape):
+def copy_img_folder(src_folder: Path, out_folder: Path, dataset_len: int):
     out_folder.mkdir()
-    for i in range(shape):
+    for i in range(dataset_len):
         img_filename = "{:06d}.png".format(i)
         source = src_folder / img_filename
         destination = out_folder / img_filename
         shutil.copyfile(source, destination)
 
 
-def kitti_to_lib_format(args):
-    if args.camera != "2" and args.camera != "3":
+def kitti_to_lib_format(source_dir, sequence, camera, output_dir):
+    if camera != "2" and camera != "3":
         raise ValueError("Invalid camera choice. Acceptable values are '2' or '3'.")
 
-    dataset = pykitti.odometry(args.source_dir, args.sequence)
-    output_dir = Path(args.output_dir)
-    source_dir = Path(args.source_dir)
+    dataset = pykitti.odometry(source_dir, sequence)
+    output_dir = Path(output_dir)
+    source_dir = Path(source_dir)
 
-    if args.camera == "2":
+    if camera == "2":
         cam_to_velo = dataset.calib.T_cam2_velo
         cam_intrinsics = dataset.calib.K_cam2
         img_folder = "image_2"
@@ -46,7 +46,7 @@ def kitti_to_lib_format(args):
         legacy_pcd_obj = o3d.t.geometry.PointCloud.from_legacy(pcd_obj)
         transformed_pcd = legacy_pcd_obj.transform(cam_to_velo)
 
-        if args.camera == "2":
+        if camera == "2":
             image = dataset.get_cam2(i)
         else:
             image = dataset.get_cam3(i)
@@ -80,7 +80,7 @@ def kitti_to_lib_format(args):
         for i in poses_to_write:
             file.write(i + "\n")
 
-    img_src_folder = source_dir / "sequences" / args.sequence / img_folder
+    img_src_folder = source_dir / "sequences" / sequence / img_folder
     img_out_folder = output_dir / img_folder
 
     copy_img_folder(img_src_folder, img_out_folder, dataset_len)
@@ -105,4 +105,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    kitti_to_lib_format(args)
+    source_dir = args.source_dir
+    sequence = args.sequence
+    camera = args.camera
+    output_dir = args.output_dir
+
+    kitti_to_lib_format(source_dir, sequence, camera, output_dir)
