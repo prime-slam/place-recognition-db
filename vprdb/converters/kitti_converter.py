@@ -2,18 +2,18 @@ import argparse
 import mrob
 import numpy as np
 import open3d as o3d
-import os
-from pathlib import Path
 import pykitti
 import shutil
 
+from pathlib import Path
+
 
 def copy_img_folder(src_folder, out_folder, shape):
-    os.mkdir(out_folder)
+    out_folder.mkdir()
     for i in range(shape):
         img_filename = "{:06d}.png".format(i)
-        source = os.path.join(src_folder, img_filename)
-        destination = os.path.join(out_folder, img_filename)
+        source = src_folder / img_filename
+        destination = out_folder / img_filename
         shutil.copyfile(source, destination)
 
 
@@ -36,15 +36,15 @@ def kitti_to_lib_format(args):
 
     poses = dataset.poses
     poses_to_write = []
-    shape = len(dataset)
+    dataset_len = len(dataset)
 
-    for i in range(shape):
+    for i in range(dataset_len):
         pcd = dataset.get_velo(i)
         pcd_obj = o3d.geometry.PointCloud()
         pcd_obj.points = o3d.utility.Vector3dVector(pcd[:, :3])
 
-        t_pcd_obj = o3d.t.geometry.PointCloud.from_legacy(pcd_obj)
-        transformed_pcd = t_pcd_obj.transform(cam_to_velo)
+        legacy_pcd_obj = o3d.t.geometry.PointCloud.from_legacy(pcd_obj)
+        transformed_pcd = legacy_pcd_obj.transform(cam_to_velo)
 
         if args.camera == "2":
             image = dataset.get_cam2(i)
@@ -80,10 +80,10 @@ def kitti_to_lib_format(args):
         for i in poses_to_write:
             file.write(i + "\n")
 
-    img_src_folder = str(source_dir / "sequences" / args.sequence / img_folder)
-    img_out_folder = str(output_dir / img_folder)
+    img_src_folder = source_dir / "sequences" / args.sequence / img_folder
+    img_out_folder = output_dir / img_folder
 
-    copy_img_folder(img_src_folder, img_out_folder, shape)
+    copy_img_folder(img_src_folder, img_out_folder, dataset_len)
 
 
 if __name__ == "__main__":
@@ -92,16 +92,16 @@ if __name__ == "__main__":
         This script converts data in KITTI format into the lib format using pykitti
         """
     )
-    parser.add_argument("source_dir", help="path to directory with KITTI dataset")
+    parser.add_argument("source_dir", help="Path to directory with KITTI dataset")
     parser.add_argument(
         "sequence",
-        help="path to a directory with a specific sequence from the KITTI dataset",
+        help="Folder with a specific sequence from the KITTI dataset. Select '00' if you want to select sequence number 00",
     )
     parser.add_argument(
-        "camera", help="choose '2' for the left camera or '3' for the right camera "
+        "camera", help="Choose '2' for the left camera or '3' for the right camera"
     )
     parser.add_argument(
-        "output_dir", help="path to the directory with converted data you want to save"
+        "output_dir", help="Path to the directory with converted data you want to save"
     )
     args = parser.parse_args()
 
