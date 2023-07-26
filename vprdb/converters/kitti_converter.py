@@ -17,7 +17,7 @@ def copy_img_folder(src_folder: Path, out_folder: Path, dataset_len: int):
         shutil.copyfile(source, destination)
 
 
-def kitti_to_lib_format(source_dir, sequence, camera, output_dir):
+def kitti_to_lib_format(source_dir: str, sequence: str, camera: str, output_dir: str):
     if camera != "2" and camera != "3":
         raise ValueError("Invalid camera choice. Acceptable values are '2' or '3'.")
 
